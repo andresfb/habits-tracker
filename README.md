@@ -1,3 +1,3 @@
 # Habits Tracker
 
-A simple web app to tracks my habits
+A simple web app to track my habits
