@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Models\Period;
@@ -9,7 +11,7 @@ use Illuminate\Support\Carbon;
 /**
  * @extends Factory<Period>
  */
-class PeriodFactory extends Factory
+final class PeriodFactory extends Factory
 {
     protected $model = Period::class;
 

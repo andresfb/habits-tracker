@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -8,10 +10,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class HabitEntry extends Model
+final class HabitEntry extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    public function habit(): BelongsTo
+    {
+        return $this->belongsTo(Habit::class);
+    }
 
     protected function casts(): array
     {
@@ -26,10 +33,5 @@ class HabitEntry extends Model
             get: static fn (int $val): int|float => $val / 1000,
             set: static fn (float $val): int => (int) round($val * 1000),
         );
-    }
-
-    public function habit(): BelongsTo
-    {
-        return $this->belongsTo(Habit::class);
     }
 }

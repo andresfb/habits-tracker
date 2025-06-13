@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\Period;
 use App\Models\Unit;
 use App\Models\User;

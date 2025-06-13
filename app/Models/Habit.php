@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -9,25 +11,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Habit extends SlugableModel
+final class Habit extends SlugableModel
 {
     use HasFactory;
     use SoftDeletes;
-
-    protected function casts(): array
-    {
-        return [
-            'allow_multiple_per_day' => 'boolean',
-        ];
-    }
-
-    protected function targetValue(): Attribute
-    {
-        return Attribute::make(
-            get: static fn (?int $val): int|float|null => is_null($val) ? null : $val / 1000,
-            set: static fn (?float $val): ?int => is_null($val) ? null : (int) round($val * 1000),
-        );
-    }
 
     public function unit(): BelongsTo
     {
@@ -54,5 +41,20 @@ class Habit extends SlugableModel
     public function entries(): HasMany
     {
         return $this->hasMany(HabitEntry::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'allow_multiple_per_day' => 'boolean',
+        ];
+    }
+
+    protected function targetValue(): Attribute
+    {
+        return Attribute::make(
+            get: static fn (?int $val): int|float|null => is_null($val) ? null : $val / 1000,
+            set: static fn (?float $val): ?int => is_null($val) ? null : (int) round($val * 1000),
+        );
     }
 }

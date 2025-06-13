@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Models\Habit;
@@ -9,7 +11,7 @@ use Illuminate\Support\Carbon;
 /**
  * @extends Factory<Habit>
  */
-class HabitFactory extends Factory
+final class HabitFactory extends Factory
 {
     protected $model = Habit::class;
 

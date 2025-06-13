@@ -1,6 +1,7 @@
 <?php
 
-use App\Models\Category;
+declare(strict_types=1);
+
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
