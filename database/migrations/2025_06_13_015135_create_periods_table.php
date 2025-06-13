@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('periods', static function (Blueprint $table) {
+        Schema::create('periods', static function (Blueprint $table): void {
             $table->id();
             $table->string('name', 100);
             $table->string('slug', 100)->unique();

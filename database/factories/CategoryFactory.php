@@ -6,6 +6,9 @@ use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
+/**
+ * @extends Factory<Category>
+ */
 class CategoryFactory extends Factory
 {
     protected $model = Category::class;
@@ -13,9 +16,9 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
-            'slug' => $this->faker->slug(),
-            'color' => $this->faker->word(),
+            'name' => fake()->name(),
+            'slug' => fake()->slug(),
+            'color' => fake()->word(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

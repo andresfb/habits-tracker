@@ -23,8 +23,8 @@ class HabitEntry extends Model
     protected function value(): Attribute
     {
         return Attribute::make(
-            get: static fn (int $val) => $val / 1000,
-            set: static fn (float $val) => (int) round($val * 1000),
+            get: static fn (int $val): int|float => $val / 1000,
+            set: static fn (float $val): int => (int) round($val * 1000),
         );
     }
 

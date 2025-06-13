@@ -9,7 +9,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('habit_entries', static function (Blueprint $table) {
+        Schema::create('habit_entries', static function (Blueprint $table): void {
             $table->id();
             $table->foreignIdFor(Habit::class)
                 ->constrained()

@@ -24,8 +24,8 @@ class Habit extends SlugableModel
     protected function targetValue(): Attribute
     {
         return Attribute::make(
-            get: static fn (?int $val) => is_null($val) ? null : $val / 1000,
-            set: static fn (?float $val) => is_null($val) ? null : (int) round($val * 1000),
+            get: static fn (?int $val): int|float|null => is_null($val) ? null : $val / 1000,
+            set: static fn (?float $val): ?int => is_null($val) ? null : (int) round($val * 1000),
         );
     }
 
