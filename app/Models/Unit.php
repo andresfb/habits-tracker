@@ -7,7 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-final class Unit extends SlugableModel
+final class Unit extends SluggableModel
 {
     use HasFactory;
 

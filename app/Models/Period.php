@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Sluggable\HasSlug;
 
-final class Period extends SlugableModel
+final class Period extends SluggableModel
 {
     use HasFactory;
     use HasSlug;

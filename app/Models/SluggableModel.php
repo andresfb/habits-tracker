@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-final class SlugableModel extends Model
+abstract class SluggableModel extends Model
 {
     use HasSlug;
 

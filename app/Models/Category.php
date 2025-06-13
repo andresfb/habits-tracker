@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-final class Category extends SlugableModel
+final class Category extends SluggableModel
 {
     use HasFactory;
     use SoftDeletes;
