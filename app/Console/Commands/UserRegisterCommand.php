@@ -1,21 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
 use RuntimeException;
 use Throwable;
 use function Laravel\Prompts\clear;
 use function Laravel\Prompts\error;
+use function Laravel\Prompts\form;
 use function Laravel\Prompts\intro;
 use function Laravel\Prompts\outro;
-use function Laravel\Prompts\password;
-use function Laravel\Prompts\text;
 
-class UserRegisterCommand extends Command
+final class UserRegisterCommand extends Command
 {
     protected $signature = 'user:register';
 
@@ -27,44 +28,47 @@ class UserRegisterCommand extends Command
             clear();
             intro('Register a new user');
 
-            $fullName = text(
-                label: 'Full Name:',
-                placeholder: 'John Doe',
-                required: true,
-                validate: 'string|max:255'
-            );
+            $responses = form()
+                ->text(
+                    label: 'Full Name:',
+                    placeholder: 'John Doe',
+                    required: true,
+                    validate: 'string|max:255',
+                    name: 'name',
+                )
+                ->text(
+                    label: 'Email:',
+                    placeholder: 'user@example.com',
+                    required: true,
+                    validate: 'string|lowercase|email|max:255',
+                    name: 'email',
+                )
+                ->password(
+                    label: 'Password:',
+                    required: true,
+                    validate: ['password' => 'min:8'],
+                    hint: 'Minimum 8 characters.',
+                    name: 'password',
+                )
+                ->password(
+                    label: 'Confirm Password:',
+                    required: true,
+                    name: 'confirm_password',
+                )
+                ->submit();
 
-            $email = text(
-                label: 'Email:',
-                placeholder: 'user@example.com',
-                required: true,
-                validate: 'string|lowercase|email|max:255',
-            );
-
-            if (User::where('email', $email)->exists()) {
+            if (User::where('email', $responses['email'])->exists()) {
                 throw new RuntimeException('Email already exists.');
             }
 
-            $password = password(
-                label: 'Password:',
-                required: true,
-                validate:  Password::defaults(),
-                hint: 'Minimum 8 characters.'
-            );
-
-            $confirmPassword = password(
-                label: 'Confirm Password:',
-                required: true,
-            );
-
-            if ($password !== $confirmPassword) {
+            if ($responses['password'] !== $responses['confirm_password']) {
                 throw new RuntimeException('Passwords do not match.');
             }
 
             $user = User::create([
-                'name' => $fullName,
-                'email' => $email,
-                'password' => Hash::make($password),
+                'name' => $responses['name'],
+                'email' => $responses['email'],
+                'password' => Hash::make($responses['password']),
                 'email_verified_at' => now(),
             ]);
 
@@ -72,9 +76,11 @@ class UserRegisterCommand extends Command
                 throw new RuntimeException('User could not be created.');
             }
 
+            event(new Registered($user));
+
             outro('User registered successfully.');
         } catch (Throwable $e) {
-            error("\nSomething went wrong:\n" . $e->getMessage());
+            error("\nSomething went wrong:\n".$e->getMessage());
         } finally {
             $this->line('');
         }

@@ -22,7 +22,7 @@ final class HabitFactory extends Factory
             'description' => fake()->text(),
             'slug' => fake()->slug(),
             'target_value' => fake()->randomNumber(),
-            'allow_multiple_per_day' => fake()->randomNumber(),
+            'allow_multiple_times' => fake()->randomNumber(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

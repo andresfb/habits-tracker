@@ -46,7 +46,8 @@ final class Habit extends SluggableModel
     protected function casts(): array
     {
         return [
-            'allow_multiple_per_day' => 'boolean',
+            'allow_multiple_times' => 'boolean',
+            'order_by' => 'integer',
         ];
     }
 

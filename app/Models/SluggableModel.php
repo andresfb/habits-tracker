@@ -12,14 +12,14 @@ abstract class SluggableModel extends Model
 {
     use HasSlug;
 
-    public function getSlugOptions(): SlugOptions
+    final public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('name')
             ->saveSlugsTo('slug');
     }
 
-    public function getRouteKeyName(): string
+    final public function getRouteKeyName(): string
     {
         return 'slug';
     }
