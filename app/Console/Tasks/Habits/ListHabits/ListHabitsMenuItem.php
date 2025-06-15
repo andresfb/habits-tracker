@@ -7,7 +7,7 @@ namespace App\Console\Tasks\Habits\ListHabits;
 use App\Console\Interfaces\MenuItemInterface;
 use App\Console\Interfaces\TaskInterface;
 
-class ListHabitsMenuItem implements MenuItemInterface
+final class ListHabitsMenuItem implements MenuItemInterface
 {
     public function itemName(): string
     {

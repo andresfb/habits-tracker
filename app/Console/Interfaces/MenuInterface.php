@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 interface MenuInterface
 {
     /**
-     * @return Collection<String|MenuItemInterface>
+     * @return Collection<string|MenuItemInterface>
      */
     public function getMenuItems(): Collection;
 }

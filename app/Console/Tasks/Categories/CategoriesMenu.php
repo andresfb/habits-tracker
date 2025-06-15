@@ -9,10 +9,10 @@ use App\Console\Tasks\Categories\AddCategories\AddCategoryMenuItem;
 use App\Console\Tasks\Categories\ListCategories\ListCategoryMenuItem;
 use Illuminate\Support\Collection;
 
-class CategoriesMenu implements MenuInterface
+final class CategoriesMenu implements MenuInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getMenuItems(): Collection
     {

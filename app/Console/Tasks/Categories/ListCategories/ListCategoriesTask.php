@@ -11,11 +11,12 @@ use App\Console\Traits\Colorable;
 use App\Models\Category;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Collection;
+
 use function Laravel\Prompts\pause;
 use function Laravel\Prompts\table;
 use function Laravel\Prompts\warning;
 
-class ListCategoriesTask implements TaskInterface
+final class ListCategoriesTask implements TaskInterface
 {
     use Colorable;
 
@@ -58,7 +59,7 @@ class ListCategoriesTask implements TaskInterface
             return;
         }
 
-        $list = $categories->map(fn(Category $category): array => [
+        $list = $categories->map(fn (Category $category): array => [
             'id' => $category->id,
             'Name' => $category->name,
             'Color' => $this->getColor($category->color),

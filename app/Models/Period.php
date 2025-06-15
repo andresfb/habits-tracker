@@ -14,11 +14,13 @@ final class Period extends SluggableModel
     use HasFactory;
     use HasSlug;
 
-    protected static function booted(): void
+    public static function getList(): array
     {
-        self::saved(static function (): void {
-            Cache::forget('period:list');
-        });
+        return Cache::remember('period:list', now()->addDay(), static fn () => self::select('id', 'name')
+            ->orderBy('name')
+            ->get()
+            ->pluck('name', 'id')
+            ->toArray());
     }
 
     public function habits(): HasMany
@@ -26,13 +28,11 @@ final class Period extends SluggableModel
         return $this->hasMany(Habit::class);
     }
 
-    public static function getList(): array
+    protected static function booted(): void
     {
-        return Cache::remember('period:list', now()->addDay(), static fn() => self::select('id', 'name')
-            ->orderBy('name')
-            ->get()
-            ->pluck('name', 'id')
-            ->toArray());
+        self::saved(static function (): void {
+            Cache::forget('period:list');
+        });
     }
 
     protected function casts(): array

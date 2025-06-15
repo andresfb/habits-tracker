@@ -8,10 +8,10 @@ use App\Console\Interfaces\MenuInterface;
 use App\Console\Tasks\Periods\ListPeriods\ListPeriodsMenuItem;
 use Illuminate\Support\Collection;
 
-class PeriodsMenu implements MenuInterface
+final class PeriodsMenu implements MenuInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getMenuItems(): Collection
     {

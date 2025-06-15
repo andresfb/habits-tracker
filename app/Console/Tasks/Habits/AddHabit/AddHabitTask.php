@@ -13,11 +13,12 @@ use App\Models\Habit;
 use App\Models\Period;
 use App\Models\Unit;
 use Illuminate\Contracts\Auth\Authenticatable;
+
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\form;
 use function Laravel\Prompts\info;
 
-readonly class AddHabitTask implements TaskInterface
+final readonly class AddHabitTask implements TaskInterface
 {
     public function __construct(private ListHabitsTask $listHabitsTask) {}
 

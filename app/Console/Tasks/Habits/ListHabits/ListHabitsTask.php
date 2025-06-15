@@ -10,11 +10,12 @@ use App\Console\Services\AuthService;
 use App\Models\Habit;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Collection;
+
 use function Laravel\Prompts\pause;
 use function Laravel\Prompts\table;
 use function Laravel\Prompts\warning;
 
-class ListHabitsTask implements TaskInterface
+final class ListHabitsTask implements TaskInterface
 {
     public function handle(): TaskResultItem
     {
@@ -56,7 +57,7 @@ class ListHabitsTask implements TaskInterface
             return;
         }
 
-        $list = $habits->map(fn(Habit $habit): array => [
+        $list = $habits->map(fn (Habit $habit): array => [
             'id' => $habit->id,
             'Name' => $habit->name,
             'Description' => str()->wrap($habit->description),

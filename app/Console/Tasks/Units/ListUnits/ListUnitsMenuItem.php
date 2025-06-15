@@ -7,7 +7,7 @@ namespace App\Console\Tasks\Units\ListUnits;
 use App\Console\Interfaces\MenuItemInterface;
 use App\Console\Interfaces\TaskInterface;
 
-class ListUnitsMenuItem implements MenuItemInterface
+final class ListUnitsMenuItem implements MenuItemInterface
 {
     public function itemName(): string
     {

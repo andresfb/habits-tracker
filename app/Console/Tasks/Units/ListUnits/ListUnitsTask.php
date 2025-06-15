@@ -8,11 +8,12 @@ use App\Console\Dtos\TaskResultItem;
 use App\Console\Interfaces\TaskInterface;
 use App\Models\Unit;
 use Illuminate\Database\Eloquent\Collection;
+
 use function Laravel\Prompts\pause;
 use function Laravel\Prompts\table;
 use function Laravel\Prompts\warning;
 
-class ListUnitsTask implements TaskInterface
+final class ListUnitsTask implements TaskInterface
 {
     public function handle(): TaskResultItem
     {
@@ -43,7 +44,7 @@ class ListUnitsTask implements TaskInterface
             return;
         }
 
-        $list = $units->map(fn(Unit $unit): array => [
+        $list = $units->map(fn (Unit $unit): array => [
             'id' => $unit->id,
             'Name' => $unit->name,
         ])->toArray();

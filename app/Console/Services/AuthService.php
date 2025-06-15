@@ -6,11 +6,12 @@ namespace App\Console\Services;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Cache;
+
 use function Laravel\Prompts\error;
 use function Laravel\Prompts\form;
 use function Laravel\Prompts\intro;
 
-class AuthService
+final class AuthService
 {
     private static string $cacheKey = 'HABIT:TRACKER:ACCESS:TOKEN:';
 
@@ -85,6 +86,6 @@ class AuthService
 
     private static function getCacheKey(): string
     {
-        return md5(self::$cacheKey . gethostname());
+        return md5(self::$cacheKey.gethostname());
     }
 }

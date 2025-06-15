@@ -15,24 +15,9 @@ final class Category extends SluggableModel
     use HasFactory;
     use SoftDeletes;
 
-    protected static function booted(): void
-    {
-        self::saved(static function (): void {
-            Cache::forget('category:list');
-        });
-    }
-
-
-    protected function casts(): array
-    {
-        return [
-            'order_by' => 'integer'
-        ];
-    }
-
     public static function getList(): array
     {
-        return Cache::remember('category:list', now()->addDay(), static fn() => self::select('id', 'name')
+        return Cache::remember('category:list', now()->addDay(), static fn () => self::select('id', 'name')
             ->orderBy('order_by')
             ->get()
             ->pluck('name', 'id')
@@ -47,5 +32,19 @@ final class Category extends SluggableModel
     public function habits(): BelongsToMany
     {
         return $this->belongsToMany(Habit::class, 'category_habit');
+    }
+
+    protected static function booted(): void
+    {
+        self::saved(static function (): void {
+            Cache::forget('category:list');
+        });
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'order_by' => 'integer',
+        ];
     }
 }

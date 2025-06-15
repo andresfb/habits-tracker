@@ -7,7 +7,7 @@ namespace App\Console\Tasks\Periods\ListPeriods;
 use App\Console\Interfaces\MenuItemInterface;
 use App\Console\Interfaces\TaskInterface;
 
-class ListPeriodsMenuItem implements MenuItemInterface
+final class ListPeriodsMenuItem implements MenuItemInterface
 {
     public function itemName(): string
     {

@@ -10,12 +10,13 @@ use App\Console\Services\AuthService;
 use App\Console\Tasks\Categories\ListCategories\ListCategoriesTask;
 use App\Console\Traits\Colorable;
 use App\Models\Category;
+
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\error;
 use function Laravel\Prompts\form;
 use function Laravel\Prompts\info;
 
-class AddCategoryTask implements TaskInterface
+final class AddCategoryTask implements TaskInterface
 {
     use Colorable;
 

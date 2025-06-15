@@ -12,11 +12,13 @@ final class Unit extends SluggableModel
 {
     use HasFactory;
 
-    protected static function booted(): void
+    public static function getList(): array
     {
-        self::saved(static function (): void {
-            Cache::forget('units:list');
-        });
+        return Cache::remember('units:list', now()->addDay(), static fn () => self::select('id', 'name')
+            ->orderBy('name')
+            ->get()
+            ->pluck('name', 'id')
+            ->toArray());
     }
 
     public function habits(): HasMany
@@ -24,12 +26,10 @@ final class Unit extends SluggableModel
         return $this->hasMany(Habit::class);
     }
 
-    public static function getList(): array
+    protected static function booted(): void
     {
-        return Cache::remember('units:list', now()->addDay(), static fn() => self::select('id', 'name')
-            ->orderBy('name')
-            ->get()
-            ->pluck('name', 'id')
-            ->toArray());
+        self::saved(static function (): void {
+            Cache::forget('units:list');
+        });
     }
 }

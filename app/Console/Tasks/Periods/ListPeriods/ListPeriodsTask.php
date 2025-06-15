@@ -8,11 +8,12 @@ use App\Console\Dtos\TaskResultItem;
 use App\Console\Interfaces\TaskInterface;
 use App\Models\Period;
 use Illuminate\Database\Eloquent\Collection;
+
 use function Laravel\Prompts\pause;
 use function Laravel\Prompts\table;
 use function Laravel\Prompts\warning;
 
-class ListPeriodsTask implements TaskInterface
+final class ListPeriodsTask implements TaskInterface
 {
     public function handle(): TaskResultItem
     {
@@ -45,10 +46,10 @@ class ListPeriodsTask implements TaskInterface
             return;
         }
 
-        $list = $periods->map(fn(Period $period): array => [
+        $list = $periods->map(fn (Period $period): array => [
             'id' => $period->id,
             'Name' => $period->name,
-            'Interval' => $period->interval_days . ' days',
+            'Interval' => $period->interval_days.' days',
         ])->toArray();
 
         $headers = ['Id', 'Name', 'Interval'];

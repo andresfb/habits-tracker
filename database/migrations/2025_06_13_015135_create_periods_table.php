@@ -19,7 +19,7 @@ return new class extends Migration
         });
 
         DB::table('periods')->insert([
-            ['name' => 'Day', 'slug' => 'day', 'interval_days' => 1,'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Day', 'slug' => 'day', 'interval_days' => 1, 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Week', 'slug' => 'week', 'interval_days' => 7, 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Month', 'slug' => 'month', 'interval_days' => 30, 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Quarter', 'slug' => 'quarter', 'interval_days' => 90, 'created_at' => now(), 'updated_at' => now()],

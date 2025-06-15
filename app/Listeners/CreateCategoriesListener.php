@@ -9,7 +9,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Config;
 
-class CreateCategoriesListener implements ShouldQueue
+final class CreateCategoriesListener implements ShouldQueue
 {
     public function handle(Registered $event): void
     {

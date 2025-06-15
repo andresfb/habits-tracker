@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Gate;
 use Laravel\Horizon\Horizon;
 use Laravel\Horizon\HorizonApplicationServiceProvider;
 
-class HorizonServiceProvider extends HorizonApplicationServiceProvider
+final class HorizonServiceProvider extends HorizonApplicationServiceProvider
 {
     /**
      * Bootstrap any application services.
@@ -29,7 +29,7 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
      */
     protected function gate(): void
     {
-        Gate::define('viewHorizon', static fn($user = null): bool => in_array(optional($user)->email, [
+        Gate::define('viewHorizon', static fn ($user = null): bool => in_array(optional($user)->email, [
             //
         ], true));
     }

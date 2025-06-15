@@ -12,6 +12,7 @@ use Illuminate\Console\Command;
 use Illuminate\Contracts\Auth\Authenticatable;
 use RuntimeException;
 use Throwable;
+
 use function Laravel\Prompts\clear;
 use function Laravel\Prompts\error;
 use function Laravel\Prompts\info;
@@ -21,7 +22,7 @@ use function Laravel\Prompts\pause;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\warning;
 
-class HabitTrackerCommand extends Command
+final class HabitTrackerCommand extends Command
 {
     protected $signature = 'habit:tracker';
 
@@ -51,7 +52,7 @@ class HabitTrackerCommand extends Command
                 warning("\nYou need to login first");
 
                 $user = AuthService::login();
-                if (!$user instanceof Authenticatable) {
+                if (! $user instanceof Authenticatable) {
                     throw new RuntimeException('Unable to login');
                 }
             }
@@ -140,7 +141,7 @@ class HabitTrackerCommand extends Command
             return;
         }
 
-        throw new RuntimeException('Invalid Selection: '. $selectedInterface::class);
+        throw new RuntimeException(sprintf("Invalid Selection: %s", $selectedInterface::class));
     }
 
     private function runTask(TaskInterface $selected): void
@@ -149,7 +150,7 @@ class HabitTrackerCommand extends Command
             $response = $selected->handle();
             clear();
 
-            if (!$response->success) {
+            if (! $response->success) {
                 error($response->message);
 
                 pause('Press ENTER to continue.');
@@ -167,7 +168,7 @@ class HabitTrackerCommand extends Command
     {
         $menu = $selected->getMenuItems();
         if ($menu->isEmpty()) {
-            throw new RuntimeException($title . ' has no menu items');
+            throw new RuntimeException(sprintf("%s has no menu items", $title));
         }
 
         $options = [];
