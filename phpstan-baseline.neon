@@ -13,13 +13,13 @@ parameters:
 			path: app/Console/Tasks/Categories/ListCategories/ListCategoriesTask.php
 
 		-
-			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<\(int\|string\),Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\|string\)\: array\{int, string, mixed, int, string, string, ''No''\|''Yes'', int\}, Closure\(App\\Models\\Habit\)\: array\{int, string, mixed, int, string, string, ''No''\|''Yes'', int\} given\.$#'
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<\(int\|string\),Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\|string\)\: array\{int, string, string, int, string, string, ''No''\|''Yes'', int\}, Closure\(App\\Models\\Habit\)\: array\{int, string, string, int, string, string, ''No''\|''Yes'', int\} given\.$#'
 			identifier: argument.type
 			count: 1
 			path: app/Console/Tasks/Habits/ListHabits/ListHabitsTask.php
 
 		-
-			message: '#^Parameter \#2 \$rows of function Laravel\\Prompts\\table expects array\<int, array\<int, string\>\>\|Illuminate\\Support\\Collection\<int, array\<int, string\>\>\|null, Illuminate\\Support\\Collection\<\(int\|string\), array\{int, string, mixed, int, string, string, string, int\}\> given\.$#'
+			message: '#^Parameter \#2 \$rows of function Laravel\\Prompts\\table expects array\<int, array\<int, string\>\>\|Illuminate\\Support\\Collection\<int, array\<int, string\>\>\|null, Illuminate\\Support\\Collection\<\(int\|string\), array\{int, string, string, int, string, string, string, int\}\> given\.$#'
 			identifier: argument.type
 			count: 1
 			path: app/Console/Tasks/Habits/ListHabits/ListHabitsTask.php
@@ -47,15 +47,3 @@ parameters:
 			identifier: larastan.noUnnecessaryCollectionCall
 			count: 1
 			path: app/Models/Category.php
-
-		-
-			message: '#^Method App\\Models\\Habit\:\:targetValue\(\) is unused\.$#'
-			identifier: method.unused
-			count: 1
-			path: app/Models/Habit.php
-
-		-
-			message: '#^Method App\\Models\\HabitEntry\:\:value\(\) is unused\.$#'
-			identifier: method.unused
-			count: 1
-			path: app/Models/HabitEntry.php
