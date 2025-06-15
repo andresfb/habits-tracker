@@ -141,7 +141,7 @@ final class HabitTrackerCommand extends Command
             return;
         }
 
-        throw new RuntimeException(sprintf("Invalid Selection: %s", $selectedInterface::class));
+        throw new RuntimeException(sprintf('Invalid Selection: %s', $selectedInterface::class));
     }
 
     private function runTask(TaskInterface $selected): void
@@ -168,7 +168,7 @@ final class HabitTrackerCommand extends Command
     {
         $menu = $selected->getMenuItems();
         if ($menu->isEmpty()) {
-            throw new RuntimeException(sprintf("%s has no menu items", $title));
+            throw new RuntimeException(sprintf('%s has no menu items', $title));
         }
 
         $options = [];

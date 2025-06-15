@@ -20,18 +20,18 @@ final class HabitEntry extends Model
         return $this->belongsTo(Habit::class);
     }
 
-    protected function casts(): array
-    {
-        return [
-            'logged_at' => 'datetime',
-        ];
-    }
-
     public function value(): Attribute
     {
         return Attribute::make(
             get: static fn (int $val): int|float => $val / 1000,
             set: static fn (float $val): int => (int) round($val * 1000),
         );
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'logged_at' => 'datetime',
+        ];
     }
 }
