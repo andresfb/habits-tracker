@@ -16,11 +16,11 @@ use function Laravel\Prompts\error;
 use function Laravel\Prompts\form;
 use function Laravel\Prompts\info;
 
-final class AddCategoryTask implements TaskInterface
+final readonly class AddCategoryTask implements TaskInterface
 {
     use Colorable;
 
-    public function __construct(private readonly ListCategoriesTask $categoriesTask) {}
+    public function __construct(private ListCategoriesTask $categoriesTask) {}
 
     public function handle(): TaskResultItem
     {
@@ -51,7 +51,7 @@ final class AddCategoryTask implements TaskInterface
             )
             ->text(
                 label: 'Order:',
-                default: $nextOrder + 1,
+                default: (string) ($nextOrder + 1),
                 required: true,
                 validate: 'integer',
                 name: 'order_by',

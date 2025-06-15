@@ -1,0 +1,61 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^While loop condition is always true\.$#'
+			identifier: while.alwaysTrue
+			count: 1
+			path: app/Console/Commands/HabitTrackerCommand.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<\(int\|string\),Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\|string\)\: array\{id\: int, Name\: string, Color\: string, Order\: int\}, Closure\(App\\Models\\Category\)\: array\{id\: int, Name\: string, Color\: string, Order\: int\} given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Console/Tasks/Categories/ListCategories/ListCategoriesTask.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<\(int\|string\),Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\|string\)\: array\{int, string, mixed, int, string, string, ''No''\|''Yes'', int\}, Closure\(App\\Models\\Habit\)\: array\{int, string, mixed, int, string, string, ''No''\|''Yes'', int\} given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Console/Tasks/Habits/ListHabits/ListHabitsTask.php
+
+		-
+			message: '#^Parameter \#2 \$rows of function Laravel\\Prompts\\table expects array\<int, array\<int, string\>\>\|Illuminate\\Support\\Collection\<int, array\<int, string\>\>\|null, Illuminate\\Support\\Collection\<\(int\|string\), array\{int, string, mixed, int, string, string, string, int\}\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Console/Tasks/Habits/ListHabits/ListHabitsTask.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<\(int\|string\),Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\|string\)\: array\{id\: int, Name\: string, Interval\: lowercase\-string&non\-falsy\-string\}, Closure\(App\\Models\\Period\)\: array\{id\: int, Name\: string, Interval\: lowercase\-string&non\-falsy\-string\} given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Console/Tasks/Periods/ListPeriods/ListPeriodsTask.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<\(int\|string\),Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\|string\)\: array\{int, string\}, Closure\(App\\Models\\Unit\)\: array\{int, string\} given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Console/Tasks/Units/ListUnits/ListUnitsTask.php
+
+		-
+			message: '#^Parameter \#2 \$rows of function Laravel\\Prompts\\table expects array\<int, array\<int, string\>\>\|Illuminate\\Support\\Collection\<int, array\<int, string\>\>\|null, Illuminate\\Support\\Collection\<\(int\|string\), array\{int, string\}\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Console/Tasks/Units/ListUnits/ListUnitsTask.php
+
+		-
+			message: '#^Called ''pluck'' on Laravel collection, but could have been retrieved as a query\.$#'
+			identifier: larastan.noUnnecessaryCollectionCall
+			count: 1
+			path: app/Models/Category.php
+
+		-
+			message: '#^Method App\\Models\\Habit\:\:targetValue\(\) is unused\.$#'
+			identifier: method.unused
+			count: 1
+			path: app/Models/Habit.php
+
+		-
+			message: '#^Method App\\Models\\HabitEntry\:\:value\(\) is unused\.$#'
+			identifier: method.unused
+			count: 1
+			path: app/Models/HabitEntry.php

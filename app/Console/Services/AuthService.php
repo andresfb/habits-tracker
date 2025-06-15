@@ -74,7 +74,7 @@ final class AuthService
 
     private static function getUser(): ?Authenticatable
     {
-        return self::getCacheUser() ?? auth()?->user();
+        return self::getCacheUser() ?? auth()->user();
     }
 
     private static function getCacheUser(): ?Authenticatable

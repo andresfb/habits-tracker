@@ -102,7 +102,7 @@ final readonly class AddHabitTask implements TaskInterface
             )
             ->text(
                 label: 'Order:',
-                default: $nextOrder + 1,
+                default: (string) ($nextOrder + 1),
                 required: true,
                 validate: 'integer',
                 name: 'order_by',

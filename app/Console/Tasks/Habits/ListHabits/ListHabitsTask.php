@@ -58,15 +58,15 @@ final class ListHabitsTask implements TaskInterface
         }
 
         $list = $habits->map(fn (Habit $habit): array => [
-            'id' => $habit->id,
-            'Name' => $habit->name,
-            'Description' => str()->wrap($habit->description),
-            'Target' => $habit->target_value,
-            'Unit' => $habit->unit->name,
-            'Period' => $habit->period->name,
-            'Multi' => $habit->allow_multiple_times ? 'Yes' : 'No',
-            'Order' => $habit->order_by,
-        ])->toArray();
+            $habit->id,
+            $habit->name,
+            str($habit->description)->wordWrap()->value(),
+            $habit->target_value,
+            $habit->unit->name,
+            $habit->period->name,
+            $habit->allow_multiple_times ? 'Yes' : 'No',
+            $habit->order_by,
+        ]);
 
         $headers = ['Id', 'Name', 'Description', 'Target', 'Unit', 'Period', 'Multi', 'Order'];
 

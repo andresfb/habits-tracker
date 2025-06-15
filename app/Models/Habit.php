@@ -10,7 +10,25 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property int $unit_id
+ * @property int $period_id
+ * @property string $name
+ * @property string $slug
+ * @property string $description
+ * @property int $target_value
+ * @property bool $allow_multiple_times
+ * @property int $order_by
+ * @property Unit $unit
+ * @property Period $period
+ * @property Carbon $deleted_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ */
 final class Habit extends SluggableModel
 {
     use HasFactory;
@@ -51,7 +69,7 @@ final class Habit extends SluggableModel
         ];
     }
 
-    private function targetValue(): Attribute
+    public function targetValue(): Attribute
     {
         return Attribute::make(
             get: static fn (?int $val): int|float|null => is_null($val) ? null : $val / 1000,

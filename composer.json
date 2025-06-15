@@ -77,7 +77,7 @@
         "lint": "pint",
         "test:rector": "rector --dry-run",
         "test:lint": "pint --test",
-        "test:types": "phpstan analyse",
+        "test:types": "phpstan analyse --ansi --memory-limit=2G",
         "test:unit": "pest --colors=always --parallel --coverage --exactly=100",
         "test:type-coverage": "pest --type-coverage --min=100",
         "test": [

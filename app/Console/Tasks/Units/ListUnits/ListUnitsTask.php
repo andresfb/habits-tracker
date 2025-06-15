@@ -45,9 +45,9 @@ final class ListUnitsTask implements TaskInterface
         }
 
         $list = $units->map(fn (Unit $unit): array => [
-            'id' => $unit->id,
-            'Name' => $unit->name,
-        ])->toArray();
+            $unit->id,
+            $unit->name,
+        ]);
 
         $headers = ['Id', 'Name'];
 
