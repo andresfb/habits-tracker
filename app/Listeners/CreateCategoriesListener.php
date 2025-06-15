@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Listeners;
 
 use App\Models\Category;
@@ -13,7 +15,7 @@ class CreateCategoriesListener implements ShouldQueue
     {
         $categories = collect(Config::array('categories.base_list'));
 
-        $categories->each(function ($category) use ($event) {
+        $categories->each(function (array $category) use ($event): void {
             $category['user_id'] = $event->user->getAuthIdentifier();
             Category::create($category);
         });

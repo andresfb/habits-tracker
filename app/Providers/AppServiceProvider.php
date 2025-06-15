@@ -21,14 +21,12 @@ final class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind('console-tasks', function () {
-            return collect([
-                HabitsMenu::class,
-                CategoriesMenu::class,
-                PeriodsMenu::class,
-                UnitsMenu::class
-            ]);
-        });
+        $this->app->bind('console-tasks', fn() => collect([
+            HabitsMenu::class,
+            CategoriesMenu::class,
+            PeriodsMenu::class,
+            UnitsMenu::class
+        ]));
     }
 
     /**

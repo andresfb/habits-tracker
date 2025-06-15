@@ -79,8 +79,8 @@ final class UserRegisterCommand extends Command
             event(new Registered($user));
 
             outro('User registered successfully.');
-        } catch (Throwable $e) {
-            error("\nSomething went wrong:\n".$e->getMessage());
+        } catch (Throwable $throwable) {
+            error("\nSomething went wrong:\n".$throwable->getMessage());
         } finally {
             $this->line('');
         }

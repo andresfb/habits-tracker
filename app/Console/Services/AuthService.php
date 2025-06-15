@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Services;
 
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -18,7 +20,7 @@ class AuthService
             return true;
         }
 
-        return self::getCacheUser() !== null;
+        return self::getCacheUser() instanceof Authenticatable;
     }
 
     public static function user(): Authenticatable

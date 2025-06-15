@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Tasks\Habits\ListHabits;
 
 use App\Console\Dtos\TaskResultItem;
@@ -33,7 +35,7 @@ class ListHabitsTask implements TaskInterface
 
         return new TaskResultItem(
             success: true,
-            message: "Found {$habits->count()} habits",
+            message: sprintf('Found %d habits', $habits->count()),
         );
     }
 
@@ -54,18 +56,16 @@ class ListHabitsTask implements TaskInterface
             return;
         }
 
-        $list = $habits->map(function (Habit $habit) {
-            return [
-                'id' => $habit->id,
-                'Name' => $habit->name,
-                'Description' => str()->wrap($habit->description),
-                'Target' => $habit->target_value,
-                'Unit' => $habit->unit->name,
-                'Period' => $habit->period->name,
-                'Multi' => $habit->allow_multiple_times ? 'Yes' : 'No',
-                'Order' => $habit->order_by,
-            ];
-        })->toArray();
+        $list = $habits->map(fn(Habit $habit): array => [
+            'id' => $habit->id,
+            'Name' => $habit->name,
+            'Description' => str()->wrap($habit->description),
+            'Target' => $habit->target_value,
+            'Unit' => $habit->unit->name,
+            'Period' => $habit->period->name,
+            'Multi' => $habit->allow_multiple_times ? 'Yes' : 'No',
+            'Order' => $habit->order_by,
+        ])->toArray();
 
         $headers = ['Id', 'Name', 'Description', 'Target', 'Unit', 'Period', 'Multi', 'Order'];
 

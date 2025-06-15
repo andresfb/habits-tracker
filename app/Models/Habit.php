@@ -51,7 +51,7 @@ final class Habit extends SluggableModel
         ];
     }
 
-    protected function targetValue(): Attribute
+    private function targetValue(): Attribute
     {
         return Attribute::make(
             get: static fn (?int $val): int|float|null => is_null($val) ? null : $val / 1000,

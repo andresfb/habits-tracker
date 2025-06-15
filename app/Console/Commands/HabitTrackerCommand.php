@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use App\Console\Interfaces\MenuInterface;
@@ -7,6 +9,7 @@ use App\Console\Interfaces\MenuItemInterface;
 use App\Console\Interfaces\TaskInterface;
 use App\Console\Services\AuthService;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Auth\Authenticatable;
 use RuntimeException;
 use Throwable;
 use function Laravel\Prompts\clear;
@@ -48,7 +51,7 @@ class HabitTrackerCommand extends Command
                 warning("\nYou need to login first");
 
                 $user = AuthService::login();
-                if (! $user) {
+                if (!$user instanceof Authenticatable) {
                     throw new RuntimeException('Unable to login');
                 }
             }
@@ -73,8 +76,8 @@ class HabitTrackerCommand extends Command
 
                 $this->processSelection($key, $options[$key]);
             }
-        } catch (Throwable $e) {
-            error("\nSomething went wrong:\n".$e->getMessage());
+        } catch (Throwable $throwable) {
+            error("\nSomething went wrong:\n".$throwable->getMessage());
         } finally {
             $this->line('');
         }
@@ -122,7 +125,7 @@ class HabitTrackerCommand extends Command
         intro($key);
 
         if ($selectedClass instanceof TaskInterface) {
-            info("Running $key...");
+            info(sprintf('Running %s...', $key));
 
             $this->runTask($selectedClass);
 
@@ -137,7 +140,7 @@ class HabitTrackerCommand extends Command
             return;
         }
 
-        throw new RuntimeException('Invalid Selection: '. get_class($selectedInterface));
+        throw new RuntimeException('Invalid Selection: '. $selectedInterface::class);
     }
 
     private function runTask(TaskInterface $selected): void
@@ -164,7 +167,7 @@ class HabitTrackerCommand extends Command
     {
         $menu = $selected->getMenuItems();
         if ($menu->isEmpty()) {
-            throw new RuntimeException("$title has no menu items");
+            throw new RuntimeException($title . ' has no menu items');
         }
 
         $options = [];
@@ -180,7 +183,7 @@ class HabitTrackerCommand extends Command
         }
 
         $options['Quit'] = 'Quit';
-        $key = $this->getSelection("Select a $title Option", $options);
+        $key = $this->getSelection(sprintf('Select a %s Option', $title), $options);
         $this->processSelection($key, $options[$key]);
     }
 }

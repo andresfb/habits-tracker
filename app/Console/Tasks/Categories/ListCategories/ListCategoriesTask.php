@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Tasks\Categories\ListCategories;
 
 use App\Console\Dtos\TaskResultItem;
@@ -36,7 +38,7 @@ class ListCategoriesTask implements TaskInterface
 
         return new TaskResultItem(
             success: true,
-            message: "Found {$categories->count()} categories",
+            message: sprintf('Found %d categories', $categories->count()),
         );
     }
 
@@ -56,14 +58,12 @@ class ListCategoriesTask implements TaskInterface
             return;
         }
 
-        $list = $categories->map(function (Category $category) {
-            return [
-                'id' => $category->id,
-                'Name' => $category->name,
-                'Color' => $this->getColor($category->color),
-                'Order' => $category->order_by,
-            ];
-        })->toArray();
+        $list = $categories->map(fn(Category $category): array => [
+            'id' => $category->id,
+            'Name' => $category->name,
+            'Color' => $this->getColor($category->color),
+            'Order' => $category->order_by,
+        ])->toArray();
 
         $headers = ['Id', 'Name', 'Color', 'Order'];
 

@@ -17,7 +17,7 @@ final class Category extends SluggableModel
 
     protected static function booted(): void
     {
-        self::saved(static function () {
+        self::saved(static function (): void {
             Cache::forget('category:list');
         });
     }
@@ -32,13 +32,11 @@ final class Category extends SluggableModel
 
     public static function getList(): array
     {
-        return Cache::remember('category:list', now()->addDay(), static function () {
-            return self::select('id', 'name')
-                ->orderBy('order_by')
-                ->get()
-                ->pluck('name', 'id')
-                ->toArray();
-        });
+        return Cache::remember('category:list', now()->addDay(), static fn() => self::select('id', 'name')
+            ->orderBy('order_by')
+            ->get()
+            ->pluck('name', 'id')
+            ->toArray());
     }
 
     public function user(): BelongsTo

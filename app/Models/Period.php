@@ -16,7 +16,7 @@ final class Period extends SluggableModel
 
     protected static function booted(): void
     {
-        self::saved(static function () {
+        self::saved(static function (): void {
             Cache::forget('period:list');
         });
     }
@@ -28,13 +28,11 @@ final class Period extends SluggableModel
 
     public static function getList(): array
     {
-        return Cache::remember('period:list', now()->addDay(), static function () {
-            return self::select('id', 'name')
-                ->orderBy('name')
-                ->get()
-                ->pluck('name', 'id')
-                ->toArray();
-        });
+        return Cache::remember('period:list', now()->addDay(), static fn() => self::select('id', 'name')
+            ->orderBy('name')
+            ->get()
+            ->pluck('name', 'id')
+            ->toArray());
     }
 
     protected function casts(): array

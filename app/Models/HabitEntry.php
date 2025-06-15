@@ -27,7 +27,7 @@ final class HabitEntry extends Model
         ];
     }
 
-    protected function value(): Attribute
+    private function value(): Attribute
     {
         return Attribute::make(
             get: static fn (int $val): int|float => $val / 1000,

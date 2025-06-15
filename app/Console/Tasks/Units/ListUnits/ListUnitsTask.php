@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Tasks\Units\ListUnits;
 
 use App\Console\Dtos\TaskResultItem;
@@ -29,7 +31,7 @@ class ListUnitsTask implements TaskInterface
 
         return new TaskResultItem(
             success: true,
-            message: "Found {$units->count()} units",
+            message: sprintf('Found %s units', $units->count()),
         );
     }
 
@@ -41,12 +43,10 @@ class ListUnitsTask implements TaskInterface
             return;
         }
 
-        $list = $units->map(function (Unit $unit) {
-            return [
-                'id' => $unit->id,
-                'Name' => $unit->name,
-            ];
-        })->toArray();
+        $list = $units->map(fn(Unit $unit): array => [
+            'id' => $unit->id,
+            'Name' => $unit->name,
+        ])->toArray();
 
         $headers = ['Id', 'Name'];
 

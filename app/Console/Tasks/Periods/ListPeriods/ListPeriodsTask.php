@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Tasks\Periods\ListPeriods;
 
 use App\Console\Dtos\TaskResultItem;
@@ -43,13 +45,11 @@ class ListPeriodsTask implements TaskInterface
             return;
         }
 
-        $list = $periods->map(function (Period $period) {
-            return [
-                'id' => $period->id,
-                'Name' => $period->name,
-                'Interval' => "$period->interval_days days",
-            ];
-        })->toArray();
+        $list = $periods->map(fn(Period $period): array => [
+            'id' => $period->id,
+            'Name' => $period->name,
+            'Interval' => $period->interval_days . ' days',
+        ])->toArray();
 
         $headers = ['Id', 'Name', 'Interval'];
 
