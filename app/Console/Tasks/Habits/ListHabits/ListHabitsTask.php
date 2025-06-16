@@ -43,7 +43,7 @@ final class ListHabitsTask implements TaskInterface
     public function getHabits(Authenticatable $user): Collection
     {
         return Habit::query()
-            ->with('unit', 'period')
+            ->with('unit', 'period', 'categories')
             ->where('user_id', $user->getAuthIdentifier())
             ->orderBy('order_by')
             ->get();
@@ -61,14 +61,16 @@ final class ListHabitsTask implements TaskInterface
             $habit->id,
             $habit->name,
             str($habit->description)->wordWrap()->value(),
+            $habit->categories->implode('name', ', '),
             $habit->target_value,
             $habit->unit->name,
             $habit->period->name,
             $habit->allow_multiple_times ? 'Yes' : 'No',
+            str($habit->notes)->wordWrap()->value(),
             $habit->order_by,
         ]);
 
-        $headers = ['Id', 'Name', 'Description', 'Target', 'Unit', 'Period', 'Multi', 'Order'];
+        $headers = ['Id', 'Name', 'Description', 'Categories', 'Target', 'Unit', 'Period', 'Multi', 'Notes', 'Order'];
 
         table($headers, $list);
     }
