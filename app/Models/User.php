@@ -8,9 +8,11 @@ use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
 
 final class User extends Authenticatable implements MustVerifyEmail
 {
@@ -41,9 +43,38 @@ final class User extends Authenticatable implements MustVerifyEmail
         'remember_token',
     ];
 
+    public function invitation(): HasOne
+    {
+        return $this->hasOne(Invitation::class);
+    }
+
     public function habits(): HasMany
     {
         return $this->hasMany(Habit::class);
+    }
+
+    public function isRegistered(): bool
+    {
+        $key = md5("user:registered:$this->id");
+
+        return Cache::remember($key, now()->addWeek(), function (): bool {
+            return $this->invitation()
+                ->whereNotNull('registered_at')
+                ->exists();
+        });
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->is_admin;
+    }
+
+    public static function getAdmin(): ?User
+    {
+        return Cache::remember('user:admin', now()->addMonth(), static function (): ?User {
+                return self::where('is_admin', true)
+                    ->first();
+        });
     }
 
     /**
@@ -54,6 +85,7 @@ final class User extends Authenticatable implements MustVerifyEmail
     protected function casts(): array
     {
         return [
+            'is_admin' => 'boolean',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];

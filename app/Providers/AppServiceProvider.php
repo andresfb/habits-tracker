@@ -6,10 +6,14 @@ namespace App\Providers;
 
 use App\Console\Tasks\Categories\CategoriesMenu;
 use App\Console\Tasks\Habits\HabitsMenu;
+use App\Console\Tasks\Invitations\InvitationsMenu;
 use App\Console\Tasks\Periods\PeriodsMenu;
 use App\Console\Tasks\Units\UnitsMenu;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
@@ -21,11 +25,15 @@ final class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind('console-tasks', fn () => collect([
+        $this->app->bind('habits-tasks', fn () => collect([
             HabitsMenu::class,
             CategoriesMenu::class,
             PeriodsMenu::class,
             UnitsMenu::class,
+        ]));
+
+        $this->app->bind('invite-tasks', fn () => collect([
+            InvitationsMenu::class,
         ]));
     }
 
@@ -43,6 +51,20 @@ final class AppServiceProvider extends ServiceProvider
         } else {
             URL::forceScheme('http');
         }
+
+        RateLimiter::for('login', static function (Request $request) {
+            return [
+                Limit::perMinute(50),
+                Limit::perMinute(5)->by($request->input('email')),
+            ];
+        });
+
+        RateLimiter::for('invite', static function (Request $request) {
+            return [
+                Limit::perMinute(20),
+                Limit::perMinute(3)->by($request->input('token')),
+            ];
+        });
     }
 
     /**

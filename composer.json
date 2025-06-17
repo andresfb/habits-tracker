@@ -10,6 +10,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.3",
+        "codeat3/blade-eos-icons": "^1.15",
         "laravel/framework": "^12.0",
         "laravel/horizon": "^5.33",
         "laravel/prompts": "^0.3.5",
@@ -18,6 +19,7 @@
         "livewire/volt": "^1.7",
         "nunomaduro/essentials": "^0.1.0",
         "robsontenorio/mary": "^2.4",
+        "serhiy/pushover": "^1.6",
         "spatie/laravel-data": "^4.15",
         "spatie/laravel-sluggable": "^3.7"
     },

@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\Models\Invitation;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use RuntimeException;
 use Throwable;
@@ -56,6 +59,10 @@ final class UserRegisterCommand extends Command
                     required: true,
                     name: 'confirm_password',
                 )
+                ->confirm(
+                    label: 'Admin User?',
+                    name: 'is_admin',
+                )
                 ->submit();
 
             if (User::where('email', $responses['email'])->exists()) {
@@ -66,18 +73,41 @@ final class UserRegisterCommand extends Command
                 throw new RuntimeException('Passwords do not match.');
             }
 
-            $user = User::create([
-                'name' => $responses['name'],
-                'email' => $responses['email'],
-                'password' => Hash::make($responses['password']),
-                'email_verified_at' => now(),
-            ]);
+            if ($responses['is_admin']) {
+                $adminUser = User::getAdmin();
 
-            if ($user === null) {
-                throw new RuntimeException('User could not be created.');
+                if ($adminUser !== null) {
+                    throw new RuntimeException('An admin user already exists.');
+                }
             }
 
-            event(new Registered($user));
+            DB::transaction(static function () use ($responses) {
+                $user = User::create([
+                    'name' => $responses['name'],
+                    'email' => $responses['email'],
+                    'password' => Hash::make($responses['password']),
+                    'email_verified_at' => now(),
+                    'is_admin' => $responses['is_admin'],
+                ]);
+
+                if ($user === null) {
+                    throw new RuntimeException('User could not be created.');
+                }
+
+                Invitation::create([
+                    'user_id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'token' => Invitation::generateToken(),
+                    'registered_at' => now(),
+                ]);
+
+                event(new Registered($user));
+
+                if ($responses['is_admin']) {
+                    Cache::forget('user:admin');
+                }
+            });
 
             outro('User registered successfully.');
         } catch (Throwable $throwable) {
