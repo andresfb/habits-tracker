@@ -25,11 +25,15 @@ final class Period extends SluggableModel
 
     public static function getList(): array
     {
-        return Cache::remember('period:list', now()->addDay(), static fn () => self::select('id', 'name')
-            ->orderBy('name')
-            ->get()
-            ->pluck('name', 'id')
-            ->toArray());
+        return Cache::remember(
+            'period:list',
+            now()->addDay(),
+            static fn() => self::select('id', 'name')
+                ->orderBy('name')
+                ->get()
+                ->pluck('name', 'id')
+                ->toArray()
+        );
     }
 
     public function habits(): HasMany

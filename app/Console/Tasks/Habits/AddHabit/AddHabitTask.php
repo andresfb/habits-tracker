@@ -25,23 +25,20 @@ final readonly class AddHabitTask implements TaskInterface
     public function handle(): TaskResultItem
     {
         $user = AuthService::user();
-        $habits = $this->listHabitsTask->getHabits($user);
-        $this->listHabitsTask->displayHabits($habits);
+
+        $this->listHabitsTask->display(
+            $this->listHabitsTask->getHabits($user)
+        );
 
         info('Create a Habit');
 
         $entry = $this->getEntry($user);
-
         $entry['user_id'] = $user->getAuthIdentifier();
-        $categoryId = $entry['category_id'];
-        unset($entry['category_id']);
 
         $habit = Habit::create($entry);
         if ($habit === null) {
             return new TaskResultItem(false, 'Could not create category.');
         }
-
-        $habit->categories()->attach($categoryId);
 
         if (confirm('Do you want to add another habit?')) {
             return $this->handle();
@@ -79,10 +76,18 @@ final readonly class AddHabitTask implements TaskInterface
                 name: 'category_id',
             )
             ->text(
-                label: 'Target:',
+                label: 'Target Value:',
+                default: '1',
                 required: true,
                 validate: 'numeric',
                 name: 'target_value',
+            )
+            ->text(
+                label: 'Default Value:',
+                default: '1',
+                required: true,
+                validate: 'numeric',
+                name: 'default_value',
             )
             ->select(
                 label: 'Select a Unit:',
@@ -99,6 +104,11 @@ final readonly class AddHabitTask implements TaskInterface
                 label: 'Allow Multiple Times per Period?',
                 default: false,
                 name: 'allow_multiple_times',
+            )
+            ->textarea(
+                label: 'Notes:',
+                rows: 3,
+                name: 'notes',
             )
             ->text(
                 label: 'Order:',

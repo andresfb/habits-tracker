@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\InvitationStatus;
 use App\Events\InvitationApprovedEvent;
+use App\Events\InvitationRejectedEvent;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -61,13 +62,25 @@ class Invitation extends Model
             ]);
 
         if ($approved === false) {
-            throw new RuntimeException('Invitation could not be approved.');
+            throw new RuntimeException('Invitation could not be approved');
         }
 
         InvitationApprovedEvent::dispatch($this->id);
     }
 
-    // TODO: add a 'rejected' method that accepts and sends a message to the user
+    public function reject(string $reason): void
+    {
+        $rejected = self::where('id', $this->id)
+            ->update([
+                'status' => InvitationStatus::REJECTED,
+            ]);
+
+        if ($rejected === false) {
+            throw new RuntimeException('Invitation could not be rejected');
+        }
+
+        InvitationRejectedEvent::dispatch($this->id, $reason);
+    }
 
     public function complete(int $userId, string $token): void
     {

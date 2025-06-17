@@ -28,7 +28,7 @@ final class ListPeriodsTask implements TaskInterface
             );
         }
 
-        $this->displayPeriods($periods);
+        $this->display($periods);
 
         pause('Press ENTER to continue.');
 
@@ -38,7 +38,7 @@ final class ListPeriodsTask implements TaskInterface
         );
     }
 
-    private function displayPeriods(Collection $periods): void
+    private function display(Collection $periods): void
     {
         if ($periods->isEmpty()) {
             warning('No periods found.');

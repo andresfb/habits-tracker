@@ -6,7 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 
@@ -17,11 +17,15 @@ final class Category extends SluggableModel
 
     public static function getList(): array
     {
-        return Cache::remember('category:list', now()->addDay(), static fn () => self::select('id', 'name')
-            ->orderBy('order_by')
-            ->get()
-            ->pluck('name', 'id')
-            ->toArray());
+        return Cache::remember(
+            'category:list',
+            now()->addDay(),
+            static fn () => self::select('id', 'name')
+                ->orderBy('order_by')
+                ->get()
+                ->pluck('name', 'id')
+                ->toArray()
+        );
     }
 
     public function user(): BelongsTo
@@ -29,9 +33,9 @@ final class Category extends SluggableModel
         return $this->belongsTo(User::class);
     }
 
-    public function habits(): BelongsToMany
+    public function habits(): HasMany
     {
-        return $this->belongsToMany(Habit::class, 'category_habit');
+        return $this->hasMany(Habit::class);
     }
 
     protected static function booted(): void

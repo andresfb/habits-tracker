@@ -17,6 +17,7 @@ return new class extends Migration
             ['name' => 'Pounds', 'slug' => 'pounds', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Words', 'slug' => 'words', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Bottles', 'slug' => 'bottles', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Hours', 'slug' => 'hours', 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 };

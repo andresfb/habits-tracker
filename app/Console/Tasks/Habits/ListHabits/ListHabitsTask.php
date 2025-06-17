@@ -30,7 +30,7 @@ final class ListHabitsTask implements TaskInterface
             );
         }
 
-        $this->displayHabits($habits);
+        $this->display($habits);
 
         pause('Press ENTER to continue.');
 
@@ -43,13 +43,13 @@ final class ListHabitsTask implements TaskInterface
     public function getHabits(Authenticatable $user): Collection
     {
         return Habit::query()
-            ->with('unit', 'period', 'categories')
+            ->with('unit', 'period', 'category')
             ->where('user_id', $user->getAuthIdentifier())
             ->orderBy('order_by')
             ->get();
     }
 
-    public function displayHabits(Collection $habits): void
+    public function display(Collection $habits): void
     {
         if ($habits->isEmpty()) {
             warning('No habits found.');
@@ -60,17 +60,34 @@ final class ListHabitsTask implements TaskInterface
         $list = $habits->map(fn (Habit $habit): array => [
             $habit->id,
             $habit->name,
-            str($habit->description)->wordWrap()->value(),
-            $habit->categories->implode('name', ', '),
+            str($habit->description)
+                ->wordWrap(28)
+                ->value(),
+            $habit->category->name,
             $habit->target_value,
+            $habit->default_value,
             $habit->unit->name,
             $habit->period->name,
             $habit->allow_multiple_times ? 'Yes' : 'No',
-            str($habit->notes)->wordWrap()->value(),
+            str($habit->notes)
+                ->wordWrap(28)
+                ->value(),
             $habit->order_by,
         ]);
 
-        $headers = ['Id', 'Name', 'Description', 'Categories', 'Target', 'Unit', 'Period', 'Multi', 'Notes', 'Order'];
+        $headers = [
+            'Id',
+            'Name',
+            'Description',
+            'Categories',
+            'Target',
+            'Default',
+            'Unit',
+            'Period',
+            'Multi',
+            'Notes',
+            'Order'
+        ];
 
         table($headers, $list);
     }

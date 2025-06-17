@@ -17,7 +17,9 @@ final class ListUnitsTask implements TaskInterface
 {
     public function handle(): TaskResultItem
     {
-        $units = Unit::get();
+        $units = Unit::query()
+            ->orderBy('name')
+            ->get();
 
         if ($units->isEmpty()) {
             return new TaskResultItem(
@@ -26,7 +28,7 @@ final class ListUnitsTask implements TaskInterface
             );
         }
 
-        $this->displayUnits($units);
+        $this->display($units);
 
         pause('Press ENTER to continue.');
 
@@ -36,7 +38,7 @@ final class ListUnitsTask implements TaskInterface
         );
     }
 
-    public function displayUnits(Collection $units): void
+    public function display(Collection $units): void
     {
         if ($units->isEmpty()) {
             warning('No categories found.');

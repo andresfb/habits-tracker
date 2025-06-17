@@ -15,6 +15,7 @@ use Illuminate\Support\Carbon;
 /**
  * @property int $id
  * @property int $user_id
+ * @property int $category_id
  * @property int $unit_id
  * @property int $period_id
  * @property string $name
@@ -33,6 +34,11 @@ final class Habit extends SluggableModel
 {
     use HasFactory;
     use SoftDeletes;
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
 
     public function unit(): BelongsTo
     {
@@ -62,6 +68,14 @@ final class Habit extends SluggableModel
     }
 
     public function targetValue(): Attribute
+    {
+        return Attribute::make(
+            get: static fn (?int $val): int|float|null => is_null($val) ? null : $val / 1000,
+            set: static fn (?float $val): ?int => is_null($val) ? null : (int) round($val * 1000),
+        );
+    }
+
+    public function defaultValue(): Attribute
     {
         return Attribute::make(
             get: static fn (?int $val): int|float|null => is_null($val) ? null : $val / 1000,

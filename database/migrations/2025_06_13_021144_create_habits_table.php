@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\Category;
 use App\Models\Period;
 use App\Models\Unit;
 use App\Models\User;
@@ -16,6 +17,9 @@ return new class extends Migration
         Schema::create('habits', static function (Blueprint $table): void {
             $table->id();
             $table->foreignIdFor(User::class)
+                ->constrained()
+                ->cascadeOnDelete();
+            $table->foreignIdFor(Category::class)
                 ->constrained()
                 ->cascadeOnDelete();
             $table->foreignIdFor(Unit::class)
