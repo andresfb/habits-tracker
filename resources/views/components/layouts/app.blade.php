@@ -40,21 +40,47 @@
                 @if($user = auth()->user())
                     <x-menu-separator />
 
-                    <x-list-item :item="$user" value="name" sub-value="email" no-separator no-hover class="-mx-2 !-my-2 rounded">
+                    <x-list-item :item="$user"
+                                 value="name"
+                                 sub-value="email"
+                                 no-separator
+                                 no-hover
+                                 class="-mx-2 !-my-2 rounded">
                         <x-slot:actions>
-                            <x-button icon="o-power" class="btn-circle btn-ghost btn-xs" tooltip-left="logoff" no-wire-navigate link="/logout" />
+                            <x-button icon="o-power"
+                                      class="btn-circle btn-ghost btn-xs"
+                                      tooltip-left="logoff"
+                                      no-wire-navigate
+                                      link="/logout" />
                         </x-slot:actions>
                     </x-list-item>
 
                     <x-menu-separator />
                 @endif
 
-                <x-menu-item title="Dashboard" icon="o-sparkles" link="{{ route('home', absolute: false) }}" />
-                <x-menu-item title="Trackers" icon="o-bars-arrow-down" link="####" />
-                <x-menu-item title="Habits" icon="o-newspaper" link="{{ route('habits.list', absolute: false) }}" />
-                <x-menu-item title="Categories" icon="o-tag" link="{{ route('categories.list', absolute: false) }}" />
-                <x-menu-item title="Units" icon="o-adjustments-horizontal" link="{{ route('units.list', absolute: false) }}" />
-                <x-menu-item title="Periods" icon="o-calendar-days" link="{{ route('periods.list', absolute: false) }}" />
+                <x-menu-item title="Dashboard"
+                             icon="o-sparkles"
+                             link="{{ route('home', absolute: false) }}" />
+
+                <x-menu-item title="Trackers"
+                             icon="o-bars-arrow-down"
+                             link="####" />
+
+                <x-menu-item title="Habits"
+                             icon="o-newspaper"
+                             link="{{ route('habits.list', absolute: false) }}" />
+
+                <x-menu-item title="Categories"
+                             icon="o-tag"
+                             link="{{ route('categories.list', absolute: false) }}" />
+
+                <x-menu-item title="Units"
+                             icon="o-adjustments-horizontal"
+                             link="{{ route('units.list', absolute: false) }}" />
+
+                <x-menu-item title="Periods"
+                             icon="o-calendar-days"
+                             link="{{ route('periods.list', absolute: false) }}" />
 
 {{--                <x-menu-sub title="Habits" icon="o-cog-6-tooth">--}}
 {{--                    <x-menu-item title="List" icon="o-wifi" link="####" />--}}

@@ -27,7 +27,16 @@ class AppBrand extends Component
                     <div {{ $attributes->class(["hidden-when-collapsed"]) }}>
                         <div class="flex items-center gap-2 w-fit">
                             <x-eos-track-changes class="w-6 -mb-1.5 text-blue-500" />
-                            <span class="font-bold text-3xl md:text-xl me-3 bg-gradient-to-r from-blue-500 to-cyan-300 bg-clip-text text-transparent ">
+                            <span class="font-bold
+                                text-3xl
+                                md:text-xl
+                                me-3
+                                bg-gradient-to-r
+                                from-blue-500
+                                to-cyan-300
+                                bg-clip-text
+                                text-transparent "
+                            >
                                 {{ config('app.name') }}
                             </span>
                         </div>
@@ -35,7 +44,7 @@ class AppBrand extends Component
 
                     <!-- Display when collapsed -->
                     <div class="display-when-collapsed hidden mx-5 mt-5 mb-1 h-[28px]">
-                        <x-icon name="s-cube" class="w-6 -mb-1.5 text-blue-500" />
+                        <x-eos-track-changes class="w-6 -mb-1.5 text-blue-500" />
                     </div>
                 </a>
             HTML;

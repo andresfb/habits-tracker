@@ -8,15 +8,13 @@ use App\Console\Dtos\TaskResultItem;
 use App\Console\Interfaces\TaskInterface;
 use App\Console\Services\AuthService;
 use App\Console\Tasks\Habits\ListHabits\ListHabitsTask;
-use App\Models\Category;
 use App\Models\Habit;
-use App\Models\Period;
-use App\Models\Unit;
 use App\Services\CategoriesService;
 use App\Services\PeriodsService;
 use App\Services\UnitsService;
 use Illuminate\Contracts\Auth\Authenticatable;
 
+use Illuminate\Support\Facades\Config;
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\form;
 use function Laravel\Prompts\info;
@@ -112,6 +110,12 @@ final readonly class AddHabitTask implements TaskInterface
                 label: 'Allow Multiple Times per Period?',
                 default: false,
                 name: 'allow_multiple_times',
+            )
+            ->text(
+                label: 'Icon',
+                placeholder: Config::string('constants.default_icon'),
+                validate: 'string',
+                name: 'icon',
             )
             ->textarea(
                 label: 'Notes:',

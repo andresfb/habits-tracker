@@ -7,10 +7,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Config;
 
 /**
  * @property int $id
@@ -20,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property int $period_id
  * @property string $name
  * @property string $slug
+ * @property string $icon
  * @property string $description
  * @property int $target_value
  * @property bool $allow_multiple_times
@@ -35,14 +36,14 @@ final class Habit extends SluggableModel
     use HasFactory;
     use SoftDeletes;
 
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(Category::class);
-    }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
 
     public function unit(): BelongsTo
@@ -60,11 +61,6 @@ final class Habit extends SluggableModel
         return $this->entries()
             ->whereDate('logged_at', now()->toDateString())
             ->exists();
-    }
-
-    public function categories(): BelongsToMany
-    {
-        return $this->belongsToMany(Category::class, 'category_habit');
     }
 
     public function entries(): HasMany
@@ -85,6 +81,15 @@ final class Habit extends SluggableModel
         return Attribute::make(
             get: static fn (?int $val): int|float|null => is_null($val) ? null : $val / 1000,
             set: static fn (?float $val): ?int => is_null($val) ? null : (int) round($val * 1000),
+        );
+    }
+
+    public function icon(): Attribute
+    {
+        return Attribute::make(
+            get: static fn (?string $val): string|null => is_null($val)
+                ? Config::string('constants.default_icon')
+                : $val,
         );
     }
 

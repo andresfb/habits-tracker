@@ -60,16 +60,20 @@ final readonly class ListHabitsTask implements TaskInterface
             $habit->id,
             $habit->name,
             str($habit->description)
-                ->wordWrap(28)
+                ->wordWrap(20)
                 ->value(),
             $habit->category->name,
             $habit->target_value,
             $habit->default_value,
             $habit->unit->name,
             $habit->period->name,
+            str($habit->icon)
+                ->replace('-', ' ')
+                ->wordWrap(15)
+                ->value(),
             $habit->allow_multiple_times ? 'Yes' : 'No',
             str($habit->notes)
-                ->wordWrap(28)
+                ->wordWrap(20)
                 ->value(),
             $habit->order_by,
         ]);
@@ -83,6 +87,7 @@ final readonly class ListHabitsTask implements TaskInterface
             'Default',
             'Unit',
             'Period',
+            'Icon',
             'Multi',
             'Notes',
             'Order'

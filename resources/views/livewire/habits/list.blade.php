@@ -10,15 +10,6 @@ new
 #[Title('Habits')]
 class extends Component {
 
-    // TODO: add a field to Habits to add an icon.
-    // TODO: make this value just the name of the component 👇
-    // TODO: use a dynamic-component to load the icon
-    // <x-dynamic-component :component="$icon" width="24" height="24" class="text-blue-600" />
-    // TODO: use the maryUI list-item component to list he Trackers
-    // https://mary-ui.com/docs/components/list-item
-
-    public string $icon = 'bi-square-fill';
-
     private HabitsService $service;
 
     public function boot(HabitsService $service): void
@@ -30,7 +21,6 @@ class extends Component {
     {
         return [
             'habits' => $this->service->getList(auth()->id()),
-            'icon' => $this->icon,
         ];
     }
 }; ?>
@@ -55,7 +45,11 @@ class extends Component {
                 <x-card class="h-full" shadow separator>
                     <x-slot:title>
                         <div class="flex justify-items-start">
-                            <x-dynamic-component :component="$icon" width="45" height="45" class="text-secondary mr-3" />
+                            <x-dynamic-component
+                                 :component="$habit->icon"
+                                 width="45"
+                                 height="45"
+                                 class="text-secondary mr-3" />
                             <span class="mt-1">
                                 {{ $habit->name }}
                             </span>
@@ -68,8 +62,8 @@ class extends Component {
 
                     <dl class="space-y-2">
                         @foreach([
-                              'Target Value' => "{$habit->target_value} {$habit->unit->name}",
-                              'Default Value' => "{$habit->default_value} {$habit->unit->name}",
+                              'Target Value' => "$habit->target_value {$habit->unit->name}",
+                              'Default Value' => "$habit->default_value {$habit->unit->name}",
                               'Period' => $habit->period->name,
                               'Allow Multiple' => $habit->allow_multiple_times ? '✅' : '🚫',
                               'Total Entries' => $habit->entries->count() ?: '—',
@@ -87,7 +81,5 @@ class extends Component {
             </div>
         @endforeach
     </div>
-
-
 
 </div>
