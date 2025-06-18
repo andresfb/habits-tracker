@@ -12,6 +12,9 @@ use App\Models\Category;
 use App\Models\Habit;
 use App\Models\Period;
 use App\Models\Unit;
+use App\Services\CategoriesService;
+use App\Services\PeriodsService;
+use App\Services\UnitsService;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 use function Laravel\Prompts\confirm;
@@ -20,7 +23,12 @@ use function Laravel\Prompts\info;
 
 final readonly class AddHabitTask implements TaskInterface
 {
-    public function __construct(private ListHabitsTask $listHabitsTask) {}
+    public function __construct(
+        private ListHabitsTask $listHabitsTask,
+        private CategoriesService $categoriesService,
+        private UnitsService $unitsService,
+        private PeriodsService $periodsService,
+    ) {}
 
     public function handle(): TaskResultItem
     {
@@ -71,7 +79,7 @@ final readonly class AddHabitTask implements TaskInterface
             )
             ->select(
                 label: 'Select a Category:',
-                options: Category::getList(),
+                options: $this->categoriesService->getSelectableList(),
                 scroll: 10,
                 name: 'category_id',
             )
@@ -91,13 +99,13 @@ final readonly class AddHabitTask implements TaskInterface
             )
             ->select(
                 label: 'Select a Unit:',
-                options: Unit::getList(),
+                options: $this->unitsService->getSelectableList(),
                 scroll: 10,
                 name: 'unit_id',
             )
             ->select(
                 label: 'Select a period:',
-                options: Period::getList(),
+                options: $this->periodsService->getSelectableList(),
                 name: 'period_id',
             )
             ->confirm(

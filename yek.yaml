@@ -3,6 +3,7 @@ ignore_patterns:
   - "ai-prompts/**"
   - "__generated__/**"
   - "storage/**"
+  - "tests/**"
   - "bootstrap/cache/**"
   - ".yek"
   - "yek.yaml"
@@ -18,8 +19,18 @@ git_boost_max: 50 # Maximum score boost based on Git history (default: 100)
 priority_rules:
   - score: 100
     pattern: "^app/"
-  - score: 70
+  - score: 90
     pattern: "^resources/"
+  - score: 80
+    pattern: "^config/"
+  - score: 80
+    pattern: "^routes/"
+  - score: 70
+    pattern: "^bootstrap/"
+  - score: 60
+    pattern: "^public/"
+  - score: 60
+    pattern: "^database/"
 
 # Define output directory
 output_dir: .yek

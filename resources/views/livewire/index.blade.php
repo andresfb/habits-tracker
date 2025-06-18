@@ -15,6 +15,7 @@ class extends Component {
 
     public string $search = '';
 
+    // TODO: add all the Create/Edit Modals
     public bool $drawer = false;
 
     public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
@@ -66,7 +67,7 @@ class extends Component {
     {
         return [
             'users' => $this->users(),
-            'headers' => $this->headers()
+            'headers' => $this->headers(),
         ];
     }
 }; ?>
@@ -82,7 +83,7 @@ class extends Component {
         </x-slot:actions>
     </x-header>
 
-    <!-- TABLE  -->
+{{--    <!-- TABLE  -->--}}
     <x-card shadow>
         <x-table :headers="$headers" :rows="$users" :sort-by="$sortBy">
             @scope('actions', $user)

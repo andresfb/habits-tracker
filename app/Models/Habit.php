@@ -40,6 +40,11 @@ final class Habit extends SluggableModel
         return $this->belongsTo(Category::class);
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function unit(): BelongsTo
     {
         return $this->belongsTo(Unit::class);

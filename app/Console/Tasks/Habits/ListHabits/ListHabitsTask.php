@@ -8,6 +8,7 @@ use App\Console\Dtos\TaskResultItem;
 use App\Console\Interfaces\TaskInterface;
 use App\Console\Services\AuthService;
 use App\Models\Habit;
+use App\Services\HabitsService;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -15,8 +16,10 @@ use function Laravel\Prompts\pause;
 use function Laravel\Prompts\table;
 use function Laravel\Prompts\warning;
 
-final class ListHabitsTask implements TaskInterface
+final readonly class ListHabitsTask implements TaskInterface
 {
+    public function __construct(private HabitsService $habitsService) {}
+
     public function handle(): TaskResultItem
     {
         $user = AuthService::user();
@@ -42,11 +45,7 @@ final class ListHabitsTask implements TaskInterface
 
     public function getHabits(Authenticatable $user): Collection
     {
-        return Habit::query()
-            ->with('unit', 'period', 'category')
-            ->where('user_id', $user->getAuthIdentifier())
-            ->orderBy('order_by')
-            ->get();
+        return $this->habitsService->getList($user->getAuthIdentifier());
     }
 
     public function display(Collection $habits): void

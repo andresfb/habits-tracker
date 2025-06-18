@@ -15,19 +15,6 @@ final class Category extends SluggableModel
     use HasFactory;
     use SoftDeletes;
 
-    public static function getList(): array
-    {
-        return Cache::remember(
-            'category:list',
-            now()->addDay(),
-            static fn () => self::select('id', 'name')
-                ->orderBy('order_by')
-                ->get()
-                ->pluck('name', 'id')
-                ->toArray()
-        );
-    }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

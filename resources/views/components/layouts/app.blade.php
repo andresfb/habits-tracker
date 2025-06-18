@@ -49,12 +49,18 @@
                     <x-menu-separator />
                 @endif
 
-                <x-menu-item title="Dashboard" icon="o-sparkles" link="/" />
+                <x-menu-item title="Dashboard" icon="o-sparkles" link="{{ route('home', absolute: false) }}" />
+                <x-menu-item title="Trackers" icon="o-bars-arrow-down" link="####" />
+                <x-menu-item title="Habits" icon="o-newspaper" link="{{ route('habits.list', absolute: false) }}" />
+                <x-menu-item title="Categories" icon="o-tag" link="{{ route('categories.list', absolute: false) }}" />
+                <x-menu-item title="Units" icon="o-adjustments-horizontal" link="{{ route('units.list', absolute: false) }}" />
+                <x-menu-item title="Periods" icon="o-calendar-days" link="{{ route('periods.list', absolute: false) }}" />
 
-                <x-menu-sub title="Settings" icon="o-cog-6-tooth">
-                    <x-menu-item title="Wifi" icon="o-wifi" link="####" />
-                    <x-menu-item title="Archives" icon="o-archive-box" link="####" />
-                </x-menu-sub>
+{{--                <x-menu-sub title="Habits" icon="o-cog-6-tooth">--}}
+{{--                    <x-menu-item title="List" icon="o-wifi" link="####" />--}}
+{{--                    <x-menu-item title="Edit" icon="o-archive-box" link="####" />--}}
+{{--                    <x-menu-item title="Archives" icon="o-archive-box" link="####" />--}}
+{{--                </x-menu-sub>--}}
             </x-menu>
         </x-slot:sidebar>
 

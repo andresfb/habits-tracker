@@ -5,7 +5,7 @@ use App\Http\Controllers\RegisterController;
 use Livewire\Volt\Volt;
 
 Route::middleware(['throttle:login'])->group(function () {
-    Volt::route('/login', '.auth.login')
+    Volt::route('/login', 'auth.login')
         ->name('login');
 
     Volt::route('/invitation', 'auth.invitation')
@@ -36,4 +36,16 @@ Volt::route('/sent', 'auth.invite-request-sent')
 Route::middleware(['auth', 'verified', 'registered'])->group(function () {
     Volt::route('/', 'index')
         ->name('home');
+
+    Volt::route('/category', 'categories.list')
+        ->name('categories.list');
+
+    Volt::route('/unit', 'units.list')
+        ->name('units.list');
+
+    Volt::route('/period', 'periods.list')
+        ->name('periods.list');
+
+    Volt::route('/habit', 'habits.list')
+        ->name('habits.list');
 });
