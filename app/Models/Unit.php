@@ -28,7 +28,7 @@ final class Unit extends SluggableModel
     protected static function booted(): void
     {
         self::saved(static function (): void {
-            Cache::forget('units:list');
+            Cache::tags('units')->flush();
         });
     }
 }

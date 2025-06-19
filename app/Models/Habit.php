@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 
 /**
@@ -20,10 +23,12 @@ use Illuminate\Support\Facades\Config;
  * @property int $period_id
  * @property string $name
  * @property string $slug
- * @property string $icon
  * @property string $description
+ * @property string $icon
  * @property int $target_value
+ * @property int $default_value
  * @property bool $allow_multiple_times
+ * @property string $notes
  * @property int $order_by
  * @property Unit $unit
  * @property Period $period
@@ -35,6 +40,31 @@ final class Habit extends SluggableModel
 {
     use HasFactory;
     use SoftDeletes;
+
+    public function targetValue(): Attribute
+    {
+        return Attribute::make(
+            get: static fn(int $val): float => $val / 1000,
+            set: static fn(float $val): int => (int)round($val * 1000),
+        );
+    }
+
+    public function defaultValue(): Attribute
+    {
+        return Attribute::make(
+            get: static fn(int $val): float => $val / 1000,
+            set: static fn(float $val): int => (int)round($val * 1000),
+        );
+    }
+
+    public function icon(): Attribute
+    {
+        return Attribute::make(
+            get: static fn(?string $val): string|null => is_null($val)
+                ? Config::string('constants.default_icon')
+                : $val,
+        );
+    }
 
     public function user(): BelongsTo
     {
@@ -68,34 +98,69 @@ final class Habit extends SluggableModel
         return $this->hasMany(HabitEntry::class);
     }
 
-    public function targetValue(): Attribute
+    public function scopeWithInfo(Builder $query): Builder
     {
-        return Attribute::make(
-            get: static fn (?int $val): int|float|null => is_null($val) ? null : $val / 1000,
-            set: static fn (?float $val): ?int => is_null($val) ? null : (int) round($val * 1000),
-        );
+        return $query->with([
+            'user',
+            'unit',
+            'period',
+            'category',
+        ]);
     }
 
-    public function defaultValue(): Attribute
+    public function scopeWithEntriesInPeriod(Builder $query, ?CarbonImmutable $asOfDate = null): Builder
     {
-        return Attribute::make(
-            get: static fn (?int $val): int|float|null => is_null($val) ? null : $val / 1000,
-            set: static fn (?float $val): ?int => is_null($val) ? null : (int) round($val * 1000),
-        );
+        $fromDate = $asOfDate
+            ? $asOfDate->toDateTimeString()
+            : Carbon::now()->toDateTimeString();
+
+        return $query->with(['entries' => function($q) use ($fromDate) {
+            $q->join('habits', 'habit_entries.habit_id', '=', 'habits.id')
+                ->join('periods', 'habits.period_id', '=', 'periods.id')
+                ->select('habit_entries.*')
+                ->whereRaw(
+                    "habit_entries.logged_at BETWEEN
+                     DATE_SUB(?, INTERVAL periods.interval_days DAY)
+                     AND ?",
+                    [$fromDate, $fromDate]
+                );
+        }]);
     }
 
-    public function icon(): Attribute
+    public function toArray(): array
     {
-        return Attribute::make(
-            get: static fn (?string $val): string|null => is_null($val)
-                ? Config::string('constants.default_icon')
-                : $val,
-        );
+        return [
+            'id' => $this->id,
+            'category_id' => $this->category_id,
+            'unit_id' => $this->unit_id,
+            'period_id' => $this->period_id,
+            'name' => $this->name,
+            'description' => $this->description ?? '',
+            'icon' => $this->icon,
+            'target_value' => $this->target_value,
+            'default_value' => $this->default_value,
+            'allow_multiple_times' => $this->allow_multiple_times,
+            'notes' => $this->notes ?? '',
+            'order_by' => $this->order_by,
+        ];
+    }
+
+    protected static function booted(): void
+    {
+        self::saved(static function (): void {
+            Cache::tags('habits')->flush();
+            Cache::tags('trackers')->flush();
+        });
     }
 
     protected function casts(): array
     {
         return [
+            'category_id' => 'integer',
+            'unit_id' => 'integer',
+            'period_id' => 'integer',
+            'target_value' => 'integer',
+            'default_value' => 'integer',
             'allow_multiple_times' => 'boolean',
             'order_by' => 'integer',
         ];

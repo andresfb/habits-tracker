@@ -31,7 +31,7 @@ final class Period extends SluggableModel
     protected static function booted(): void
     {
         self::saved(static function (): void {
-            Cache::forget('period:list');
+            Cache::tags('periods')->flush();
         });
     }
 

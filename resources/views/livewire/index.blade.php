@@ -1,6 +1,10 @@
 <?php
 
+use App\Dtos\TrackerItem;
+use App\Models\Habit;
 use App\Models\User;
+use App\Services\TrackerService;
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -9,96 +13,188 @@ use Mary\Traits\Toast;
 
 new
 #[Layout('components.layouts.app')]
-#[Title('Dashboard')]
+#[Title('Trackers')]
 class extends Component {
     use Toast;
 
-    public string $search = '';
+    public bool $showEditModal = false;
 
-    // TODO: add all the Create/Edit Modals
-    public bool $drawer = false;
+    public array $entryForm = [
+        'id' => '',
+        'name' => '',
+        'value' => 0.00,
+        'default' => 0.00,
+        'unit' => '',
+    ];
 
-    public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
+    private TrackerService $service;
 
-    // Clear filters
-    public function clear(): void
+    public function boot(TrackerService $service): void
     {
-        $this->reset();
-        $this->success('Filters cleared.', position: 'toast-bottom');
+        $this->service = $service;
     }
 
-    // Delete action
-    public function delete($id): void
-    {
-        $this->warning("Will delete #$id", 'It is fake.', position: 'toast-bottom');
-    }
-
-    // Table headers
-    public function headers(): array
+    protected function rules(): array
     {
         return [
-            ['key' => 'id', 'label' => '#', 'class' => 'w-1'],
-            ['key' => 'name', 'label' => 'Name', 'class' => 'w-64'],
-            ['key' => 'age', 'label' => 'Age', 'class' => 'w-20'],
-            ['key' => 'email', 'label' => 'E-mail', 'sortable' => false],
+            'entryForm.value' => 'required|numeric',
         ];
     }
 
-    /**
-     * For demo purpose, this is a static collection.
-     *
-     * On real projects you do it with Eloquent collections.
-     * Please, refer to maryUI docs to see the eloquent examples.
-     */
-    public function users(): Collection
+    public function show(int $habitId): void
     {
-        return collect([
-            ['id' => 1, 'name' => 'Mary', 'email' => 'mary@mary-ui.com', 'age' => 23],
-            ['id' => 2, 'name' => 'Giovanna', 'email' => 'giovanna@mary-ui.com', 'age' => 7],
-            ['id' => 3, 'name' => 'Marina', 'email' => 'marina@mary-ui.com', 'age' => 5],
-        ])
-            ->sortBy([[...array_values($this->sortBy)]])
-            ->when($this->search, function (Collection $collection) {
-                return $collection->filter(fn(array $item) => str($item['name'])->contains($this->search, true));
+        $habit = $this->service->habitService->find($habitId, auth()->id());
+        if ($habit === null) {
+            $this->toast('error', 'Habit not found');
+
+            return;
+        }
+
+        $this->entryForm = [
+            'id' => $habit->id,
+            'name' => $habit->name,
+            'value' => 0.00,
+            'default' => $habit->default_value,
+            'unit' => $habit->unit->name,
+        ];
+
+        $this->showEditModal = true;
+    }
+
+    public function store(int $habitId): void
+    {
+        $this->validate();
+
+        $this->service->recordCustomEntry(
+            $habitId,
+            auth()->id(),
+            $this->entryForm['value'],
+        );
+
+        $this->showEditModal = false;
+
+        $this->toast(
+            type: 'success',
+            title: 'Entry added!',
+        );
+    }
+
+    public function addEntry(int $habitId): void
+    {
+        try {
+            $this->service->recordEntry(
+                $habitId,
+                auth()->id(),
+            );
+        } catch (Exception $e) {
+            $this->toast(
+                type: 'error',
+                title: 'Error recording Entry',
+                description: $e->getMessage(),
+            );
+        }
+
+        $this->toast('success', 'Entry save successfully');
+    }
+
+    public function trackers(): Collection
+    {
+        return $this->service->getDailyTrackers(auth()->id())
+            ->map(function (Habit $habit) {
+                $entriesTotal = $habit->entries->sum('value');
+                $needsEntry = $entriesTotal < $habit->target_value;
+
+                $needsEntryClass = 'text-success';
+                if ($needsEntry) {
+                    $needsEntryClass = 'text-muted';
+                }
+
+                return new TrackerItem(
+                    id: $habit->id,
+                    name: $habit->name,
+                    icon: $habit->icon,
+                    subTitle: sprintf(
+                        "%d %s of %d in a %s",
+                        $entriesTotal,
+                        mb_strtolower($habit->unit->name),
+                        $habit->target_value,
+                        $habit->period->name
+                    ),
+                    allowMore: $habit->allow_multiple_times,
+                    needsEntry: $needsEntry,
+                    needsEntryClass: $needsEntryClass,
+                );
             });
     }
 
     public function with(): array
     {
         return [
-            'users' => $this->users(),
-            'headers' => $this->headers(),
+            'trackers' => $this->trackers(),
         ];
     }
 }; ?>
 
 <div>
     <!-- HEADER -->
-    <x-header title="Dashboard" separator progress-indicator>
-        <x-slot:middle class="!justify-end">
-            <x-input placeholder="Search..." wire:model.live.debounce="search" clearable icon="o-magnifying-glass"/>
-        </x-slot:middle>
-        <x-slot:actions>
-            <x-button label="Filters" @click="$wire.drawer = true" responsive icon="o-funnel"/>
-        </x-slot:actions>
-    </x-header>
+    <x-header title="Daily Trackers" subtitle="For {{ now()->toFormattedDateString() }}" separator progress-indicator/>
 
-{{--    <!-- TABLE  -->--}}
     <x-card shadow>
-        <x-table :headers="$headers" :rows="$users" :sort-by="$sortBy">
-            @scope('actions', $user)
-            <x-button icon="o-trash" wire:click="delete({{ $user['id'] }})" wire:confirm="Are you sure?" spinner class="btn-ghost btn-sm text-error"/>
-            @endscope
-        </x-table>
+        @foreach($trackers as $tracker)
+            <x-list-item :item="$tracker" class="mb-1">
+                <x-slot:avatar wire:click="show({{ $tracker->id }})">
+                    <x-dynamic-component
+                        :component="$tracker->icon"
+                        width="45"
+                        height="45"
+                        class="text-secondary mr-3"/>
+                </x-slot:avatar>
+                <x-slot:value wire:click="show({{ $tracker->id }})">
+                    {{ $tracker->name }}
+                </x-slot:value>
+                <x-slot:sub-value class="{{ $tracker->needsEntryClass }}" wire:click="show({{ $tracker->id }})">
+                    <div class="w-45 whitespace-normal">
+                        {{ $tracker->subTitle }}
+                    </div>
+                </x-slot:sub-value>
+                <x-slot:actions>
+                    @if($tracker->needsEntry || $tracker->allowMore)
+                        <x-button class="btn-ghost p-0 -m-px" wire:click="addEntry({{ $tracker->id }})">
+                            <x-bi-square
+                                width="35"
+                                height="35"
+                                class="text-secondary"/>
+                        </x-button>
+                    @else
+                        <x-button class="btn-ghost p-0 -m-px" disabled>
+                            <x-bi-check-square width="35" height="35" class="text-success"/>
+                        </x-button>
+                    @endif
+                </x-slot:actions>
+            </x-list-item>
+        @endforeach
     </x-card>
 
-    <!-- FILTER DRAWER -->
-    <x-drawer wire:model="drawer" title="Filters" right separator with-close-button class="lg:w-1/3">
-        <x-input placeholder="Search..." wire:model.live.debounce="search" icon="o-magnifying-glass" @keydown.enter="$wire.drawer = false"/>
+    <!-- EDIT MODAL -->
+    <x-modal wire:model="showEditModal"
+             title="Custom Entry for {{ $entryForm['name'] }}"
+             persistent
+             separator>
+        <x-form wire:submit.prevent="store({{ $entryForm['id'] }})">
 
-        <x-slot:actions>
-            <x-button label="Reset" icon="o-x-mark" wire:click="clear" spinner/>
-            <x-button label="Done" icon="o-check" class="btn-primary" @click="$wire.drawer = false"/>
-        </x-slot:actions>
-    </x-drawer>
+            <x-input label="Enter Value"
+                     wire:model.defer="entryForm.value"
+                     type="number"
+                     hint="{{ $entryForm['default'] . ' ' . $entryForm['unit'] }}"
+                     suffix="{{ $entryForm['unit'] }}"/>
+
+            <x-slot:actions>
+                <x-button label="Cancel"
+                          @click="$wire.showEditModal = false"/>
+                <x-button type="submit"
+                          label="Save"
+                          class="btn-primary"/>
+            </x-slot:actions>
+        </x-form>
+    </x-modal>
 </div>

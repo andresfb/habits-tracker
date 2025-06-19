@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('name', 100);
             $table->string('slug', 100)->unique();
             $table->text('description')->nullable();
-            $table->unsignedInteger('target_value')->nullable();
+            $table->unsignedInteger('target_value')->default(0);
             $table->tinyInteger('allow_multiple_times')->default(1);
             $table->softDeletes();
             $table->timestamps();

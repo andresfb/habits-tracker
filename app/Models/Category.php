@@ -28,7 +28,7 @@ final class Category extends SluggableModel
     protected static function booted(): void
     {
         self::saved(static function (): void {
-            Cache::forget('category:list');
+            Cache::tags('categories')->flush();
         });
     }
 

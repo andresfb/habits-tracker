@@ -37,15 +37,15 @@ Route::middleware(['auth', 'verified', 'registered'])->group(function () {
     Volt::route('/', 'index')
         ->name('home');
 
-    Volt::route('/category', 'categories.list')
-        ->name('categories.list');
+    Volt::route('/category', 'categories.index')
+        ->name('categories');
 
-    Volt::route('/unit', 'units.list')
-        ->name('units.list');
+    Volt::route('/unit', 'units.index')
+        ->name('units');
 
-    Volt::route('/period', 'periods.list')
-        ->name('periods.list');
+    Volt::route('/period', 'periods.index')
+        ->name('periods');
 
-    Volt::route('/habit', 'habits.list')
-        ->name('habits.list');
+    Volt::route('/habit', 'habits.index')
+        ->name('habits');
 });

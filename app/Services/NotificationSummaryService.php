@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use JsonException;
 
-class NotificationsSummaryService
+class NotificationSummaryService
 {
     public function execute(): void
     {

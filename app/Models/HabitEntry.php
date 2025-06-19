@@ -9,7 +9,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 
+/**
+ * @property int $id
+ * @property int $habit_id
+ * @property int $value
+ * @property Carbon $logged_at
+ * @property string $notes
+ * @property Carbon $deleted_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ */
 final class HabitEntry extends Model
 {
     use HasFactory;
@@ -26,6 +38,13 @@ final class HabitEntry extends Model
             get: static fn (int $val): int|float => $val / 1000,
             set: static fn (float $val): int => (int) round($val * 1000),
         );
+    }
+
+    protected static function booted(): void
+    {
+        self::saved(static function (): void {
+            Cache::tags('trackers')->flush();
+        });
     }
 
     protected function casts(): array

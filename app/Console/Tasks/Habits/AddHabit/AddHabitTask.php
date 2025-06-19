@@ -8,10 +8,12 @@ use App\Console\Dtos\TaskResultItem;
 use App\Console\Interfaces\TaskInterface;
 use App\Console\Services\AuthService;
 use App\Console\Tasks\Habits\ListHabits\ListHabitsTask;
+use App\Dtos\HabitItem;
 use App\Models\Habit;
-use App\Services\CategoriesService;
-use App\Services\PeriodsService;
-use App\Services\UnitsService;
+use App\Services\CategoryService;
+use App\Services\HabitService;
+use App\Services\PeriodService;
+use App\Services\UnitService;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 use Illuminate\Support\Facades\Config;
@@ -23,9 +25,10 @@ final readonly class AddHabitTask implements TaskInterface
 {
     public function __construct(
         private ListHabitsTask $listHabitsTask,
-        private CategoriesService $categoriesService,
-        private UnitsService $unitsService,
-        private PeriodsService $periodsService,
+        private HabitService $habitsService,
+        private CategoryService $categoriesService,
+        private UnitService $unitsService,
+        private PeriodService $periodsService,
     ) {}
 
     public function handle(): TaskResultItem
@@ -41,10 +44,9 @@ final readonly class AddHabitTask implements TaskInterface
         $entry = $this->getEntry($user);
         $entry['user_id'] = $user->getAuthIdentifier();
 
-        $habit = Habit::create($entry);
-        if ($habit === null) {
-            return new TaskResultItem(false, 'Could not create category.');
-        }
+        $this->habitsService->create(
+            HabitItem::from($entry)
+        );
 
         if (confirm('Do you want to add another habit?')) {
             return $this->handle();

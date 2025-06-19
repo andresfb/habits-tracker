@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Services\NotificationsSummaryService;
+use App\Services\NotificationSummaryService;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -21,7 +21,7 @@ class NotificationsSummaryJob implements ShouldQueue
     /**
      * @throws Exception
      */
-    public function handle(NotificationsSummaryService $service): void
+    public function handle(NotificationSummaryService $service): void
     {
         try {
             $service->execute();

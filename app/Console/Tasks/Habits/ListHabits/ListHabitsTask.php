@@ -8,7 +8,7 @@ use App\Console\Dtos\TaskResultItem;
 use App\Console\Interfaces\TaskInterface;
 use App\Console\Services\AuthService;
 use App\Models\Habit;
-use App\Services\HabitsService;
+use App\Services\HabitService;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -18,7 +18,7 @@ use function Laravel\Prompts\warning;
 
 final readonly class ListHabitsTask implements TaskInterface
 {
-    public function __construct(private HabitsService $habitsService) {}
+    public function __construct(private HabitService $habitsService) {}
 
     public function handle(): TaskResultItem
     {
