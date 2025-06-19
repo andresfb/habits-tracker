@@ -35,7 +35,7 @@ class PushoverLibrary
         }
 
         $errors = [
-            "Found errors sending Pushover Notification: $text",
+            "Found errors sending Pushover Notification: {$text}",
         ];
 
         $errors = implode("\n", array_merge($errors, $response->getErrors()));

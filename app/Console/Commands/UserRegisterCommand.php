@@ -76,12 +76,12 @@ final class UserRegisterCommand extends Command
             if ($responses['is_admin']) {
                 $adminUser = User::getAdmin();
 
-                if ($adminUser !== null) {
+                if ($adminUser instanceof User) {
                     throw new RuntimeException('An admin user already exists.');
                 }
             }
 
-            DB::transaction(static function () use ($responses) {
+            DB::transaction(static function () use ($responses): void {
                 $user = User::create([
                     'name' => $responses['name'],
                     'email' => $responses['email'],

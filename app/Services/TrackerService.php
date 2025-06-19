@@ -19,7 +19,7 @@ readonly class TrackerService
     {
         return Cache::tags('trackers')
             ->remember(
-                "daily:trackers:$userId",
+                "daily:trackers:{$userId}",
                 now()->addMinutes(15),
                 static fn () => Habit::query()
                     ->withInfo()
@@ -33,7 +33,7 @@ readonly class TrackerService
     public function recordEntry(int $habitId, int $userId): void
     {
         $habit = $this->habitService->find($habitId, $userId);
-        if ($habit === null) {
+        if (!$habit instanceof Habit) {
             throw new RuntimeException('Habit not found');
         }
 
@@ -48,7 +48,7 @@ readonly class TrackerService
     public function recordCustomEntry(int $habitId, int $userId, float $value): void
     {
         $habit = $this->habitService->find($habitId, $userId);
-        if ($habit === null) {
+        if (!$habit instanceof Habit) {
             throw new RuntimeException('Habit not found');
         }
 

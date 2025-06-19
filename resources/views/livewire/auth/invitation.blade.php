@@ -27,6 +27,8 @@ class extends Component {
         if (auth()->user()) {
             return redirect('/');
         }
+
+        return null;
     }
 
     public function invite(): Redirector
@@ -40,7 +42,7 @@ class extends Component {
         }
 
         $admin = User::getAdmin();
-        if ($admin === null) {
+        if (!$admin instanceof User) {
             abort(410, 'Administrator not available');
         }
 

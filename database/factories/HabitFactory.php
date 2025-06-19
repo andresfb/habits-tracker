@@ -8,6 +8,9 @@ use App\Models\Unit;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
+/**
+ * @extends Factory<Habit>
+ */
 class HabitFactory extends Factory
 {
     protected $model = Habit::class;
@@ -15,18 +18,18 @@ class HabitFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => $this->faker->randomNumber(),
-            'category_id' => $this->faker->randomNumber(),
-            'name' => $this->faker->name(),
-            'slug' => $this->faker->slug(),
-            'description' => $this->faker->text(),
-            'target_value' => $this->faker->randomNumber(),
-            'allow_multiple_times' => $this->faker->boolean(),
-            'order_by' => $this->faker->randomNumber(),
+            'user_id' => fake()->randomNumber(),
+            'category_id' => fake()->randomNumber(),
+            'name' => fake()->name(),
+            'slug' => fake()->slug(),
+            'description' => fake()->text(),
+            'target_value' => fake()->randomNumber(),
+            'allow_multiple_times' => fake()->boolean(),
+            'order_by' => fake()->randomNumber(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-            'notes' => $this->faker->word(),
-            'default_value' => $this->faker->randomFloat(),
+            'notes' => fake()->word(),
+            'default_value' => fake()->randomFloat(),
 
             'unit_id' => Unit::factory(),
             'period_id' => Period::factory(),

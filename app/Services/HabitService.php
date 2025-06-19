@@ -29,7 +29,7 @@ class HabitService
     {
         return Cache::tags('habits')
             ->remember(
-                "habit:find:$habitId:$userId",
+                "habit:find:{$habitId}:{$userId}",
                 now()->addHour(),
                 static fn () => Habit::query()
                     ->withInfo()

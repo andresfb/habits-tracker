@@ -65,9 +65,7 @@ class extends Component {
     {
         return $this->service->getList()
             ->sortBy([[...array_values($this->sortBy)]])
-            ->when($this->search, function (Collection $collection) {
-                return $collection->filter(fn(array $item) => str($item['name'])->contains($this->search, true));
-            });
+            ->when($this->search, fn(Collection $collection) => $collection->filter(fn(array $item) => str($item['name'])->contains($this->search, true)));
     }
 
     // → Show the “Add” modal
@@ -120,11 +118,11 @@ class extends Component {
                 CategoryItem::from($this->categoryForm)
                     ->withId($this->editingCategoryId)
             );
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->toast(
                 type: 'error',
                 title: 'Error updating',
-                description: $e->getMessage(),
+                description: $exception->getMessage(),
             );
         }
 

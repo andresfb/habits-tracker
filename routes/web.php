@@ -16,7 +16,7 @@ Route::middleware(['throttle:login'])->group(function () {
         ->name('login.auth');
 });
 
-Route::middleware(['invitation', 'throttle:invite'])->group(function () {
+Route::middleware(['invitation', 'throttle:invite'])->group(function (): void {
     Route::get('/register', RegisterController::class)
         ->name('register');
 });
@@ -33,7 +33,7 @@ Volt::route('/sent', 'auth.invite-request-sent')
     ->name('invite.sent');
 
 // Protected routes here
-Route::middleware(['auth', 'verified', 'registered'])->group(function () {
+Route::middleware(['auth', 'verified', 'registered'])->group(function (): void {
     Volt::route('/', 'index')
         ->name('home');
 

@@ -40,7 +40,7 @@ class CategoryService
     {
         return Cache::tags('categories')
             ->remember(
-                "category:find:$categoryId",
+                "category:find:{$categoryId}",
                 now()->addHour(),
                 static fn () => Category::query()
                     ->where('id', $categoryId)

@@ -6,6 +6,9 @@ use App\Models\Unit;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
+/**
+ * @extends Factory<Unit>
+ */
 class UnitFactory extends Factory
 {
     protected $model = Unit::class;
@@ -13,8 +16,8 @@ class UnitFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
-            'slug' => $this->faker->slug(),
+            'name' => fake()->name(),
+            'slug' => fake()->slug(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

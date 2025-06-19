@@ -25,10 +25,10 @@ class NotificationsSummaryJob implements ShouldQueue
     {
         try {
             $service->execute();
-        } catch (Exception $e) {
-            Log::error($e->getMessage());
+        } catch (Exception $exception) {
+            Log::error($exception->getMessage());
 
-            throw $e;
+            throw $exception;
         }
     }
 }

@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('habits', static function (Blueprint $table) {
+        Schema::table('habits', static function (Blueprint $table): void {
             $table->unsignedInteger('default_value')
                 ->after('target_value')
                 ->default(0);
@@ -17,7 +17,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('habits', static function (Blueprint $table) {
+        Schema::table('habits', static function (Blueprint $table): void {
             $table->dropColumn('default_value');
         });
     }

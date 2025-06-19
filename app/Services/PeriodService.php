@@ -40,7 +40,7 @@ class PeriodService
     {
         return Cache::tags('periods')
             ->remember(
-                "period:find:$periodId",
+                "period:find:{$periodId}",
                 now()->addHour(),
                 static fn () => Period::query()
                     ->where('id', $periodId)

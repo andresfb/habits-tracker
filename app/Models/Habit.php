@@ -110,11 +110,11 @@ final class Habit extends SluggableModel
 
     public function scopeWithEntriesInPeriod(Builder $query, ?CarbonImmutable $asOfDate = null): Builder
     {
-        $fromDate = $asOfDate
+        $fromDate = $asOfDate instanceof CarbonImmutable
             ? $asOfDate->toDateTimeString()
             : Carbon::now()->toDateTimeString();
 
-        return $query->with(['entries' => function($q) use ($fromDate) {
+        return $query->with(['entries' => function($q) use ($fromDate): void {
             $q->join('habits', 'habit_entries.habit_id', '=', 'habits.id')
                 ->join('periods', 'habits.period_id', '=', 'periods.id')
                 ->select('habit_entries.*')

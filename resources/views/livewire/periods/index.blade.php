@@ -55,9 +55,7 @@ class extends Component {
     {
         return $this->service->getList()
             ->sortBy([[...array_values($this->sortBy)]])
-            ->when($this->search, function (Collection $collection) {
-                return $collection->filter(fn(array $item) => str($item['name'])->contains($this->search, true));
-            });
+            ->when($this->search, fn(Collection $collection) => $collection->filter(fn(array $item) => str($item['name'])->contains($this->search, true)));
     }
 
     public function create(): void
@@ -105,11 +103,11 @@ class extends Component {
                 PeriodItem::from($this->periodForm)
                     ->withId($this->editingPeriodId)
             );
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->toast(
                 type: 'error',
                 title: 'Error updating',
-                description: $e->getMessage(),
+                description: $exception->getMessage(),
             );
         }
 

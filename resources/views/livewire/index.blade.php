@@ -44,7 +44,7 @@ class extends Component {
     public function show(int $habitId): void
     {
         $habit = $this->service->habitService->find($habitId, auth()->id());
-        if ($habit === null) {
+        if (!$habit instanceof Habit) {
             $this->toast('error', 'Habit not found');
 
             return;
@@ -86,11 +86,11 @@ class extends Component {
                 $habitId,
                 auth()->id(),
             );
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->toast(
                 type: 'error',
                 title: 'Error recording Entry',
-                description: $e->getMessage(),
+                description: $exception->getMessage(),
             );
         }
 
@@ -100,7 +100,7 @@ class extends Component {
     public function trackers(): Collection
     {
         return $this->service->getDailyTrackers(auth()->id())
-            ->map(function (Habit $habit) {
+            ->map(function (Habit $habit): TrackerItem {
                 $entriesTotal = $habit->entries->sum('value');
                 $needsEntry = $entriesTotal < $habit->target_value;
 

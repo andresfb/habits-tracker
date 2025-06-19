@@ -77,7 +77,7 @@ class extends Component {
             auth()->id(),
         );
 
-        if ($habit === null) {
+        if (!$habit instanceof Habit) {
             $this->toast(
                 type: 'error',
                 title: 'Habit not found',
@@ -120,11 +120,11 @@ class extends Component {
                     ->withId($this->editingHabitId)
                     ->withUserId(auth()->id())
             );
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->toast(
                 type: 'error',
                 title: 'Error updating',
-                description: $e->getMessage(),
+                description: $exception->getMessage(),
             );
         }
 

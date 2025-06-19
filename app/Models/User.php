@@ -57,11 +57,9 @@ final class User extends Authenticatable implements MustVerifyEmail
     {
         $key = md5("user:registered:$this->id");
 
-        return Cache::remember($key, now()->addWeek(), function (): bool {
-            return $this->invitation()
-                ->whereNotNull('registered_at')
-                ->exists();
-        });
+        return Cache::remember($key, now()->addWeek(), fn(): bool => $this->invitation()
+            ->whereNotNull('registered_at')
+            ->exists());
     }
 
     public function isAdmin(): bool
@@ -71,10 +69,8 @@ final class User extends Authenticatable implements MustVerifyEmail
 
     public static function getAdmin(): ?User
     {
-        return Cache::remember('user:admin', now()->addMonth(), static function (): ?User {
-                return self::where('is_admin', true)
-                    ->first();
-        });
+        return Cache::remember('user:admin', now()->addMonth(), static fn(): ?User => self::where('is_admin', true)
+            ->first());
     }
 
     /**

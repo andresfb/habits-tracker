@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
+use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\Config\RectorConfig;
 use Rector\Exception\Configuration\InvalidConfigurationException;
 use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
+use Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector;
 use RectorLaravel\Rector\ClassMethod\ScopeNamedClassMethodToScopeAttributedClassMethodRector;
 use RectorLaravel\Set\LaravelLevelSetList;
 use RectorLaravel\Set\LaravelSetList;
@@ -30,6 +32,8 @@ try {
             AddOverrideAttributeToOverriddenMethodsRector::class,
             DisallowedEmptyRuleFixerRector::class,
             ScopeNamedClassMethodToScopeAttributedClassMethodRector::class,
+            DeclareStrictTypesRector::class,
+            EncapsedStringsToSprintfRector::class,
         ])
         ->withPreparedSets(
             deadCode: true,

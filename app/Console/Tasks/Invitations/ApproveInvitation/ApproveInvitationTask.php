@@ -69,12 +69,12 @@ readonly class ApproveInvitationTask implements TaskInterface
                 success: true,
                 message: 'Invitation approved.'
             );
-        } catch (Throwable $e) {
+        } catch (Throwable $throwable) {
             DB::rollBack();
 
             return new TaskResultItem(
                 success: false,
-                message: $e->getMessage(),
+                message: $throwable->getMessage(),
             );
         }
     }

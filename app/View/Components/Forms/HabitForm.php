@@ -12,10 +12,6 @@ use Illuminate\View\Component;
 
 class HabitForm extends Component
 {
-    public string $model;
-
-    public string $submitAction;
-
     public Collection $categories;
 
     public Collection $periods;
@@ -28,10 +24,8 @@ class HabitForm extends Component
 
     private readonly CategoryService $categoryService;
 
-    public function __construct(string $model, string $submitAction)
+    public function __construct(public string $model, public string $submitAction)
     {
-        $this->model = $model;
-        $this->submitAction = $submitAction;
         $this->categoryService = app(CategoryService::class);
         $this->unitService = app(UnitService::class);
         $this->periodService = app(PeriodService::class);

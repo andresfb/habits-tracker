@@ -40,7 +40,7 @@ class UnitService
     {
         return Cache::tags('units')
             ->remember(
-                "unit:find:$unitId",
+                "unit:find:{$unitId}",
                 now()->addHour(),
                 static fn () => Unit::query()
                     ->where('id', $unitId)

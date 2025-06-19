@@ -22,11 +22,13 @@ class extends Component {
         if (auth()->user()) {
             return redirect()->route('home');
         }
+
+        return null;
     }
 
     public function login(SendLoginLinkAction $action): void
     {
-        $credentials = $this->validate();
+        $this->validate();
 
         $action->handle(
             email: $this->email,

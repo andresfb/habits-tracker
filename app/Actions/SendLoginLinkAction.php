@@ -18,19 +18,19 @@ final readonly class SendLoginLinkAction
             ->first();
 
         if (! $user) {
-            Log::warning("Login attempt with invalid email: $email");
+            Log::warning("Login attempt with invalid email: {$email}");
 
             return;
         }
 
         if (! $user->hasVerifiedEmail()) {
-            Log::warning("Login attempt with unverified email: $email");
+            Log::warning("Login attempt with unverified email: {$email}");
 
             return;
         }
 
         if (! $user->isRegistered()) {
-            Log::warning("Login attempt with unregistered email: $email");
+            Log::warning("Login attempt with unregistered email: {$email}");
 
             return;
         }

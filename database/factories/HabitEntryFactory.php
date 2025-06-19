@@ -7,6 +7,9 @@ use App\Models\HabitEntry;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
+/**
+ * @extends Factory<HabitEntry>
+ */
 class HabitEntryFactory extends Factory
 {
     protected $model = HabitEntry::class;
@@ -14,9 +17,9 @@ class HabitEntryFactory extends Factory
     public function definition(): array
     {
         return [
-            'value' => $this->faker->randomFloat(),
+            'value' => fake()->randomFloat(),
             'logged_at' => Carbon::now(),
-            'notes' => $this->faker->word(),
+            'notes' => fake()->word(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
 
