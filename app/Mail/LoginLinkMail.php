@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
@@ -9,7 +11,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class LoginLinkMail extends Mailable implements ShouldQueue
+final class LoginLinkMail extends Mailable implements ShouldQueue
 {
     use Queueable;
     use SerializesModels;
@@ -19,7 +21,7 @@ class LoginLinkMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: config('app.name') . ' - Login Link',
+            subject: config('app.name').' - Login Link',
         );
     }
 

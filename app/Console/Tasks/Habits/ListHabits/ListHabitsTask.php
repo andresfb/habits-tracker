@@ -90,7 +90,7 @@ final readonly class ListHabitsTask implements TaskInterface
             'Icon',
             'Multi',
             'Notes',
-            'Order'
+            'Order',
         ];
 
         table($headers, $list);

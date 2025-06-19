@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Dtos\HabitItem;
@@ -8,13 +10,13 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 use RuntimeException;
 
-class HabitService
+final class HabitService
 {
     public function getList(int $userId): Collection
     {
         return Cache::tags('habits')
             ->remember(
-                "habits:list",
+                'habits:list',
                 now()->addHour(),
                 static fn () => Habit::query()
                     ->withInfo()

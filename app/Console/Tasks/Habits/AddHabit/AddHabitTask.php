@@ -15,8 +15,8 @@ use App\Services\HabitService;
 use App\Services\PeriodService;
 use App\Services\UnitService;
 use Illuminate\Contracts\Auth\Authenticatable;
-
 use Illuminate\Support\Facades\Config;
+
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\form;
 use function Laravel\Prompts\info;

@@ -52,12 +52,12 @@ final class AppServiceProvider extends ServiceProvider
             URL::forceScheme('http');
         }
 
-        RateLimiter::for('login', static fn(Request $request): array => [
+        RateLimiter::for('login', static fn (Request $request): array => [
             Limit::perMinute(50),
             Limit::perMinute(5)->by($request->input('email')),
         ]);
 
-        RateLimiter::for('invite', static fn(Request $request): array => [
+        RateLimiter::for('invite', static fn (Request $request): array => [
             Limit::perMinute(20),
             Limit::perMinute(3)->by($request->input('token')),
         ]);

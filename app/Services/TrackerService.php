@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Models\Habit;
@@ -9,7 +11,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use RuntimeException;
 
-readonly class TrackerService
+final readonly class TrackerService
 {
     public function __construct(
         public HabitService $habitService,
@@ -33,7 +35,7 @@ readonly class TrackerService
     public function recordEntry(int $habitId, int $userId): void
     {
         $habit = $this->habitService->find($habitId, $userId);
-        if (!$habit instanceof Habit) {
+        if (! $habit instanceof Habit) {
             throw new RuntimeException('Habit not found');
         }
 
@@ -48,7 +50,7 @@ readonly class TrackerService
     public function recordCustomEntry(int $habitId, int $userId, float $value): void
     {
         $habit = $this->habitService->find($habitId, $userId);
-        if (!$habit instanceof Habit) {
+        if (! $habit instanceof Habit) {
             throw new RuntimeException('Habit not found');
         }
 

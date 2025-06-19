@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Dtos\PeriodItem;
@@ -8,7 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 use RuntimeException;
 
-class PeriodService
+final class PeriodService
 {
     public function getSelectableList(): array
     {
@@ -16,11 +18,11 @@ class PeriodService
             ->remember(
                 'period:selectable:list',
                 now()->addDay(),
-                static fn() => Period::select('id', 'name')
+                static fn () => Period::select('id', 'name')
                     ->orderBy('name')
                     ->get()
-                ->pluck('name', 'id')
-                ->toArray()
+                    ->pluck('name', 'id')
+                    ->toArray()
             );
     }
 

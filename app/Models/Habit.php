@@ -44,23 +44,23 @@ final class Habit extends SluggableModel
     public function targetValue(): Attribute
     {
         return Attribute::make(
-            get: static fn(int $val): float => $val / 1000,
-            set: static fn(float $val): int => (int)round($val * 1000),
+            get: static fn (int $val): float => $val / 1000,
+            set: static fn (float $val): int => (int) round($val * 1000),
         );
     }
 
     public function defaultValue(): Attribute
     {
         return Attribute::make(
-            get: static fn(int $val): float => $val / 1000,
-            set: static fn(float $val): int => (int)round($val * 1000),
+            get: static fn (int $val): float => $val / 1000,
+            set: static fn (float $val): int => (int) round($val * 1000),
         );
     }
 
     public function icon(): Attribute
     {
         return Attribute::make(
-            get: static fn(?string $val): string|null => is_null($val)
+            get: static fn (?string $val): ?string => is_null($val)
                 ? Config::string('constants.default_icon')
                 : $val,
         );
@@ -114,14 +114,14 @@ final class Habit extends SluggableModel
             ? $asOfDate->toDateTimeString()
             : Carbon::now()->toDateTimeString();
 
-        return $query->with(['entries' => function($q) use ($fromDate): void {
+        return $query->with(['entries' => function ($q) use ($fromDate): void {
             $q->join('habits', 'habit_entries.habit_id', '=', 'habits.id')
                 ->join('periods', 'habits.period_id', '=', 'periods.id')
                 ->select('habit_entries.*')
                 ->whereRaw(
-                    "habit_entries.logged_at BETWEEN
+                    'habit_entries.logged_at BETWEEN
                      DATE_SUB(?, INTERVAL periods.interval_days DAY)
-                     AND ?",
+                     AND ?',
                     [$fromDate, $fromDate]
                 );
         }]);

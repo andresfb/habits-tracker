@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
-class InvitationsCommand extends MenuBasedCommand
+final class InvitationsCommand extends MenuBasedCommand
 {
     protected $signature = 'invitations';
 

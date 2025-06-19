@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\View\Components\Forms;
 
 use App\Services\CategoryService;
@@ -10,7 +12,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\Component;
 
-class HabitForm extends Component
+final class HabitForm extends Component
 {
     public Collection $categories;
 

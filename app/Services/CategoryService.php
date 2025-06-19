@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Dtos\CategoryItem;
@@ -8,7 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 use RuntimeException;
 
-class CategoryService
+final class CategoryService
 {
     public function getSelectableList(): array
     {
@@ -19,9 +21,9 @@ class CategoryService
                 static fn () => Category::select('id', 'name')
                     ->orderBy('order_by')
                     ->get()
-                ->pluck('name', 'id')
-                ->toArray()
-        );
+                    ->pluck('name', 'id')
+                    ->toArray()
+            );
     }
 
     public function getList(): Collection
@@ -33,7 +35,7 @@ class CategoryService
                 static fn () => Category::query()
                     ->orderBy('order_by')
                     ->get()
-        );
+            );
     }
 
     public function find(int $categoryId): Category
@@ -45,7 +47,7 @@ class CategoryService
                 static fn () => Category::query()
                     ->where('id', $categoryId)
                     ->first()
-        );
+            );
     }
 
     public function create(CategoryItem $category): void

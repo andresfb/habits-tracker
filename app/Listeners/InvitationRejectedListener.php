@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Listeners;
 
 use App\Enums\InvitationStatus;
@@ -8,7 +10,7 @@ use App\Mail\InvitationRejectedMail;
 use App\Models\Invitation;
 use Illuminate\Support\Facades\Mail;
 
-class InvitationRejectedListener
+final class InvitationRejectedListener
 {
     public function handle(InvitationRejectedEvent $event): void
     {

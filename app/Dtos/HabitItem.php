@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Dtos;
 
 use Spatie\LaravelData\Data;
 
-class HabitItem extends Data
+final class HabitItem extends Data
 {
     public function __construct(
         public readonly int $id = 0,
@@ -64,7 +66,7 @@ class HabitItem extends Data
     {
         $data = parent::toArray();
         unset($data['id']);
-            
+
         return $data;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Dtos\UnitItem;
@@ -8,7 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 use RuntimeException;
 
-class UnitService
+final class UnitService
 {
     public function getSelectableList(): array
     {
@@ -16,12 +18,12 @@ class UnitService
             ->remember(
                 'units:selectable:list',
                 now()->addDay(),
-                static fn() => Unit::select('id', 'name')
+                static fn () => Unit::select('id', 'name')
                     ->orderBy('name')
                     ->get()
                     ->pluck('name', 'id')
-                ->toArray()
-        );
+                    ->toArray()
+            );
     }
 
     public function getList(): Collection

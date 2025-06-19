@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Tasks\Invitations\ListsInvitations;
 
 use App\Console\Dtos\TaskResultItem;
@@ -14,7 +16,7 @@ use function Laravel\Prompts\pause;
 use function Laravel\Prompts\table;
 use function Laravel\Prompts\warning;
 
-class ListInvitationsTask implements TaskInterface
+final class ListInvitationsTask implements TaskInterface
 {
     public function handle(): TaskResultItem
     {

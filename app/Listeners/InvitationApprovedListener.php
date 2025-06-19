@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Listeners;
 
 use App\Enums\InvitationStatus;
@@ -9,7 +11,7 @@ use App\Models\Invitation;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Mail;
 
-class InvitationApprovedListener implements ShouldQueue
+final class InvitationApprovedListener implements ShouldQueue
 {
     public function handle(InvitationApprovedEvent $event): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Models\Unit;
@@ -9,7 +11,7 @@ use Illuminate\Support\Carbon;
 /**
  * @extends Factory<Unit>
  */
-class UnitFactory extends Factory
+final class UnitFactory extends Factory
 {
     protected $model = Unit::class;
 

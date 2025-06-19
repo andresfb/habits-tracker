@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Libraries\Pushover\PushoverLibrary;
@@ -11,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use JsonException;
 
-class NotificationSummaryService
+final class NotificationSummaryService
 {
     public function execute(): void
     {

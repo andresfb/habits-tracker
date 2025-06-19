@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Tasks\Invitations\ApproveInvitation;
 
 use App\Console\Dtos\TaskResultItem;
@@ -8,14 +10,14 @@ use App\Console\Services\AuthService;
 use App\Console\Tasks\Invitations\ListsInvitations\ListInvitationsTask;
 use App\Models\Invitation;
 use App\Models\User;
-
 use Illuminate\Support\Facades\DB;
 use Throwable;
+
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\select;
 
-readonly class ApproveInvitationTask implements TaskInterface
+final readonly class ApproveInvitationTask implements TaskInterface
 {
     public function __construct(private ListInvitationsTask $listTask) {}
 
@@ -29,7 +31,7 @@ readonly class ApproveInvitationTask implements TaskInterface
 
             /** @var User $user */
             $user = AuthService::user();
-            if (!$user->isAdmin()) {
+            if (! $user->isAdmin()) {
                 return new TaskResultItem(
                     success: false,
                     message: 'You are not authorized to perform this action.'
@@ -55,7 +57,7 @@ readonly class ApproveInvitationTask implements TaskInterface
                 label: "Approve invitation for $invitation->name?",
             );
 
-            if (!$approve) {
+            if (! $approve) {
                 return new TaskResultItem(
                     success: false,
                     message: 'Invitation not approved.'

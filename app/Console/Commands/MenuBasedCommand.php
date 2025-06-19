@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use App\Console\Interfaces\MenuInterface;
@@ -26,7 +28,7 @@ abstract class MenuBasedCommand extends Command
 
     abstract public function getTaskKey(): string;
 
-    public function handle(): void
+    final public function handle(): void
     {
         try {
             clear();

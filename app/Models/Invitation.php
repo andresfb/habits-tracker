@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Enums\InvitationStatus;
@@ -23,25 +25,20 @@ use RuntimeException;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
-class Invitation extends Model
+final class Invitation extends Model
 {
     use SoftDeletes;
 
     public static function generateToken(): string
     {
-        return substr(
+        return mb_substr(
             string: hash(
                 'sha256',
-                sprintf("%s|%s", Str::random(20), time())
+                sprintf('%s|%s', Str::random(20), time())
             ),
-            offset: 0,
+            start: 0,
             length: 40
         );
-    }
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
     }
 
     public static function getPendingList(): array
@@ -52,6 +49,11 @@ class Invitation extends Model
             ->get()
             ->pluck('email', 'id')
             ->toArray();
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function approve(): void

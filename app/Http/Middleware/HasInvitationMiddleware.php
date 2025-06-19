@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Middleware;
 
 use App\Enums\InvitationStatus;
@@ -7,7 +9,7 @@ use App\Models\Invitation;
 use Closure;
 use Illuminate\Http\Request;
 
-class HasInvitationMiddleware
+final class HasInvitationMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
@@ -20,7 +22,7 @@ class HasInvitationMiddleware
 
         // validate the request
         $validated = $request->validate([
-            'token' => 'bail|required|string|alpha_num|size:40'
+            'token' => 'bail|required|string|alpha_num|size:40',
         ]);
 
         $invitation = Invitation::where('token', $validated['token'])

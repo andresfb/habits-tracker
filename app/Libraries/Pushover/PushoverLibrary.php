@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Libraries\Pushover;
 
 use Illuminate\Support\Facades\Config;
@@ -9,7 +11,7 @@ use Serhiy\Pushover\Api\Message\Notification;
 use Serhiy\Pushover\Application;
 use Serhiy\Pushover\Recipient;
 
-class PushoverLibrary
+final class PushoverLibrary
 {
     public static function notify(string $text, string $title = ''): void
     {
