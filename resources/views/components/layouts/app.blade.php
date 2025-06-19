@@ -64,7 +64,7 @@
 
                 <x-menu-item title="Overview"
                              icon="o-sparkles"
-                             link="####" />
+                             link="{{ route('overview', absolute: false) }}" />
 
                 <x-menu-item title="Habits"
                              icon="o-newspaper"

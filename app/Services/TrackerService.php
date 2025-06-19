@@ -25,7 +25,22 @@ final readonly class TrackerService
                 now()->addMinutes(15),
                 static fn () => Habit::query()
                     ->withInfo()
-                    ->withEntriesInPeriod($loggDate)
+                    ->withEntriesOnDay($loggDate)
+                    ->where('user_id', $userId)
+                    ->orderBy('order_by')
+                    ->get()
+            );
+    }
+
+    public function getMonthlyTrackers(int $userId, CarbonImmutable $loggDate = null): Collection
+    {
+        return Cache::tags('trackers')
+            ->remember(
+                "monthly:trackers:{$userId}",
+                now()->addHour(),
+                static fn () => Habit::query()
+                    ->withInfo()
+                    ->withEntriesOnMonth($loggDate)
                     ->where('user_id', $userId)
                     ->orderBy('order_by')
                     ->get()

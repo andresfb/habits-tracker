@@ -50,4 +50,7 @@ Route::middleware(['auth', 'verified', 'registered'])->group(function (): void {
 
     Volt::route('/habit', 'habits.index')
         ->name('habits');
+
+    Volt::route('/overview', 'overview.index')
+        ->name('overview');
 });

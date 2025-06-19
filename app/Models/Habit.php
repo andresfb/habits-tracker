@@ -86,13 +86,6 @@ final class Habit extends SluggableModel
         return $this->belongsTo(Period::class);
     }
 
-    public function hasEntryToday(): bool
-    {
-        return $this->entries()
-            ->whereDate('logged_at', now()->toDateString())
-            ->exists();
-    }
-
     public function entries(): HasMany
     {
         return $this->hasMany(HabitEntry::class);
@@ -108,21 +101,36 @@ final class Habit extends SluggableModel
         ]);
     }
 
-    public function scopeWithEntriesInPeriod(Builder $query, ?CarbonImmutable $asOfDate = null): Builder
+    public function scopeWithEntriesOnDay(Builder $query, ?CarbonImmutable $asOfDate = null): Builder
     {
         $fromDate = $asOfDate instanceof CarbonImmutable
-            ? $asOfDate->toDateTimeString()
-            : Carbon::now()->toDateTimeString();
+            ? $asOfDate->startOfDay()->toDateTimeString()
+            : Carbon::now()->startOfDay()->toDateTimeString();
 
         return $query->with(['entries' => function ($q) use ($fromDate): void {
             $q->join('habits', 'habit_entries.habit_id', '=', 'habits.id')
                 ->join('periods', 'habits.period_id', '=', 'periods.id')
                 ->select('habit_entries.*')
                 ->whereRaw(
-                    'habit_entries.logged_at BETWEEN
-                     DATE_SUB(?, INTERVAL periods.interval_days DAY)
-                     AND ?',
-                    [$fromDate, $fromDate]
+                    'DATEDIFF(?, DATE(habit_entries.logged_at))
+                    BETWEEN 0 AND periods.interval_days - 1',
+                    [$fromDate]
+                );
+        }]);
+    }
+
+    public function scopeWithEntriesOnMonth(Builder $query, CarbonImmutable $asOfDate): Builder
+    {
+        $fromDate = $asOfDate->startOfMonth()->toDateTimeString();
+        $toDate = $asOfDate->endOfMonth()->toDateTimeString();
+
+        return $query->with(['entries' => function ($q) use ($fromDate, $toDate): void {
+            $q->join('habits', 'habit_entries.habit_id', '=', 'habits.id')
+                ->join('periods', 'habits.period_id', '=', 'periods.id')
+                ->select('habit_entries.*')
+                ->whereRaw(
+                    'habit_entries.logged_at BETWEEN DATE_SUB(?, INTERVAL periods.interval_days -1 DAY) AND ? ',
+                    [$fromDate, $toDate]
                 );
         }]);
     }

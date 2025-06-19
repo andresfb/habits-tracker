@@ -141,7 +141,7 @@ class extends Component {
 
     <x-card shadow>
         @foreach($trackers as $tracker)
-            <x-list-item :item="$tracker" class="mb-1">
+            <x-list-item :item="$tracker" class="mb-1" cursor-pointer>
                 <x-slot:avatar wire:click="show({{ $tracker->id }})">
                     <x-dynamic-component
                         :component="$tracker->icon"
@@ -153,13 +153,13 @@ class extends Component {
                     {{ $tracker->name }}
                 </x-slot:value>
                 <x-slot:sub-value class="{{ $tracker->needsEntryClass }}" wire:click="show({{ $tracker->id }})">
-                    <div class="w-45 whitespace-normal">
+                    <div class="w-45 md:w-full whitespace-normal">
                         {{ $tracker->subTitle }}
                     </div>
                 </x-slot:sub-value>
                 <x-slot:actions>
                     @if($tracker->needsEntry || $tracker->allowMore)
-                        <x-button class="btn-ghost p-0 -m-px" wire:click="addEntry({{ $tracker->id }})">
+                        <x-button class="btn-ghost p-0 -m-px" wire:click="addEntry({{ $tracker->id }})" spinner="register">
                             <x-bi-square
                                 width="35"
                                 height="35"
