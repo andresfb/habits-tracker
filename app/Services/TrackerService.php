@@ -32,7 +32,7 @@ final readonly class TrackerService
             );
     }
 
-    public function getMonthlyTrackers(int $userId, CarbonImmutable $loggDate = null): Collection
+    public function getMonthlyTrackers(int $userId, CarbonImmutable $loggDate): Collection
     {
         return Cache::tags('trackers')
             ->remember(
