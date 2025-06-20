@@ -34,6 +34,7 @@
         "spatie/laravel-sluggable": "^3.7"
     },
     "require-dev": {
+        "deployer/deployer": "^7.5",
         "driftingly/rector-laravel": "^2.0",
         "fakerphp/faker": "^1.23",
         "larastan/larastan": "^3.4",

@@ -1,6 +1,7 @@
 <?php
 
 use App\Actions\SendLoginLinkAction;
+use Illuminate\Http\RedirectResponse;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
 use Livewire\Attributes\Title;
@@ -16,7 +17,7 @@ class extends Component {
 
     public bool $showForm = true;
 
-    public function mount()
+    public function mount(): ?RedirectResponse
     {
         // It is logged in
         if (auth()->user()) {
@@ -51,7 +52,9 @@ class extends Component {
             <x-input placeholder="E-mail" wire:model="email" icon="o-envelope"/>
 
             <x-slot:actions>
-                <x-button label="Create an account" class="btn-ghost" link="{{ route('invitation') }}"/>
+                @if (config('constants.registration_enabled'))
+                    <x-button label="Create an account" class="btn-ghost" link="{{ route('invitation') }}"/>
+                @endif
                 <x-button label="Login" type="submit" icon="o-paper-airplane" class="btn-primary" spinner="login"/>
             </x-slot:actions>
         </x-form>

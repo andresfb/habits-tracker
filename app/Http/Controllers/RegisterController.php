@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Actions\RegisterUserAction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Throwable;
 
 final class RegisterController extends Controller
@@ -16,6 +17,10 @@ final class RegisterController extends Controller
      */
     public function __invoke(Request $request, RegisterUserAction $action): RedirectResponse
     {
+        if (! Config::boolean('constants.registration_enabled')) {
+            return redirect()->route('login');
+        }
+
         $validated = $request->validate([
             'token' => 'required|string|alpha_num|size:40',
         ]);

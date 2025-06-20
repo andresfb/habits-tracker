@@ -10,6 +10,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
 use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Config:
 
 new
 #[Layout('components.layouts.empty')]
@@ -21,11 +22,15 @@ class extends Component {
     #[Rule('required|email|unique:invitations')]
     public string $email = '';
 
-    public function mount()
+    public function mount(): ?RedirectResponse
     {
+        if (! Config::boolean('constants.registration_enabled')) {
+            return redirect()->route('login');
+        }
+
         // It is logged in
         if (auth()->user()) {
-            return redirect('/');
+            return redirect()->route('home');
         }
 
         return null;
