@@ -116,7 +116,7 @@ try {
     task('env:pull', function () {
         $envBase = get('env_file');
         $envDir = get('local_env_dir');
-        $envFile = getenv('VAULT_SOLACE_PATH').'/'.$envBase;
+        $envFile = getenv('VAULT_HABITS_PATH').'/'.$envBase;
         $localEnvPath = "$envDir/$envBase";
 
         if (! file_exists($localEnvPath)) {
@@ -154,12 +154,7 @@ try {
 
         run("rm -rf $releasePath/storage/logs");
         run("ln -sfn /server-logs/habits/$logPath $releasePath/storage/logs");
-
-        run("rm -rf $releasePath/storage/process");
-        run("ln -sfn /data1/storage/habits/processing $releasePath/storage/processing");
     });
-
-    // TODO: continue here
 
     // Composer install (with first deploy check)
     task('deploy:vendors', function () {
@@ -177,34 +172,13 @@ try {
 
     // -- disable migrations completely
     task('artisan:migrate', function () {
-        writeln('⚠️  Skipping database migrations.');
+        writeln('⚠️ Skipping database migrations.');
     });
 
     // Laravel optimize commands
     task('laravel:optimize', function () {
         run('{{bin/php}} {{release_path}}/artisan optimize:clear');
         run('{{bin/php}} {{release_path}}/artisan optimize');
-    });
-
-    // Supervisor restart
-    task('supervisor:restart', function () {
-        if (get('skip_supervisor', false)) {
-            writeln('⚠️  Supervisor is not installed on this server – skipping.');
-
-            return;
-        }
-
-        $checkSupervisor = run('systemctl is-active supervisor.service || true');
-
-        if (trim($checkSupervisor) === 'active') {
-            writeln('🔄 Supervisor is running, restarting programs...');
-            run('sudo systemctl restart supervisor.service');
-        } else {
-            writeln('🚀 Supervisor not running. Starting supervisor service...');
-            run('sudo systemctl start supervisor.service');
-        }
-
-        run('sleep 2'); // Wait a bit
     });
 
     // ==== CLEANUP LOCAL SECRETS AFTER DEPLOY ====
@@ -223,7 +197,6 @@ try {
     after('deploy:update_code', 'deploy:cleanup_release');
     after('artisan:storage:link', 'storage:symlinks');
     before('deploy:symlink', 'laravel:optimize');
-    after('deploy:symlink', 'supervisor:restart');
     after('deploy:success', 'deploy:cleanup_local_secrets');
     after('deploy:failed', 'deploy:unlock');
     after('deploy:failed', 'deploy:cleanup');
