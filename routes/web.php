@@ -6,7 +6,7 @@ use App\Http\Controllers\LoginAccessController;
 use App\Http\Controllers\RegisterController;
 use Livewire\Volt\Volt;
 
-Route::middleware(['throttle:login'])->group(function () {
+Route::middleware(['throttle:login'])->group(function (): void {
     Volt::route('/login', 'auth.login')
         ->name('login');
 

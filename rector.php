@@ -2,54 +2,33 @@
 
 declare(strict_types=1);
 
-use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\Config\RectorConfig;
 use Rector\Exception\Configuration\InvalidConfigurationException;
 use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
-use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
-use Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector;
-use RectorLaravel\Rector\ClassMethod\ScopeNamedClassMethodToScopeAttributedClassMethodRector;
-use RectorLaravel\Set\LaravelLevelSetList;
-use RectorLaravel\Set\LaravelSetList;
 
 try {
     return RectorConfig::configure()
         ->withPaths([
-            __DIR__.'/app',
-            __DIR__.'/bootstrap/app.php',
-            __DIR__.'/config',
-            __DIR__.'/public',
-            __DIR__.'/resources',
-            __DIR__.'/routes',
-            __DIR__.'/tests',
-            __DIR__.'/database',
+            __DIR__.'/',
         ])
         ->withSkip([
             __DIR__.'/bootstrap/cache',
             __DIR__.'/storage',
             __DIR__.'/node_modules',
             __DIR__.'/vendor',
+            __DIR__.'/.yek',
+            __DIR__.'/deploy.php',
+            __DIR__.'/rector.php',
             AddOverrideAttributeToOverriddenMethodsRector::class,
-            DisallowedEmptyRuleFixerRector::class,
-            ScopeNamedClassMethodToScopeAttributedClassMethodRector::class,
-            DeclareStrictTypesRector::class,
-            EncapsedStringsToSprintfRector::class,
         ])
         ->withPreparedSets(
             deadCode: true,
             codeQuality: true,
-            codingStyle: true,
             typeDeclarations: true,
             privatization: true,
             earlyReturn: true,
             strictBooleans: true,
-            rectorPreset: true,
         )
-        ->withSets([
-            LaravelLevelSetList::UP_TO_LARAVEL_120,
-            LaravelSetList::LARAVEL_CODE_QUALITY,
-            LaravelSetList::LARAVEL_COLLECTION,
-        ])
         ->withPhpSets(
             php83: true,
         );

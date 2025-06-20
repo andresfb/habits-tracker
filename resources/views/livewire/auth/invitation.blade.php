@@ -10,7 +10,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
 use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Config:
+use Illuminate\Support\Facades\Config;
 
 new
 #[Layout('components.layouts.empty')]

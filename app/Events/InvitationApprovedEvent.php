@@ -6,9 +6,9 @@ namespace App\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
 
-final class InvitationApprovedEvent
+final readonly class InvitationApprovedEvent
 {
     use Dispatchable;
 
-    public function __construct(public readonly int $invitationId) {}
+    public function __construct(public int $invitationId) {}
 }

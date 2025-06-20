@@ -6,12 +6,12 @@ namespace App\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
 
-final class InvitationRejectedEvent
+final readonly class InvitationRejectedEvent
 {
     use Dispatchable;
 
     public function __construct(
-        public readonly int $invitationId,
-        public readonly string $reason,
+        public int $invitationId,
+        public string $reason,
     ) {}
 }

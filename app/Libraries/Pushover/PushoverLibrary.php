@@ -15,11 +15,11 @@ final class PushoverLibrary
 {
     public static function notify(string $text, string $title = ''): void
     {
-        if (empty($text)) {
+        if ($text === '' || $text === '0') {
             return;
         }
 
-        if (empty($title)) {
+        if ($title === '' || $title === '0') {
             $title = 'Habit Tracker new Invitations';
         }
 
