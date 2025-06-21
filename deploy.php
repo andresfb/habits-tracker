@@ -220,27 +220,6 @@ task('laravel:optimize', function () {
     run('{{bin/php}} {{release_path}}/artisan optimize');
 });
 
-// Supervisor restart
-task('supervisor:restart', function () {
-    if (get('skip_supervisor', false)) {
-        writeln('⚠️ Supervisor is not installed on this server – skipping.');
-
-        return;
-    }
-
-    $checkSupervisor = run('systemctl is-active supervisor.service || true');
-
-    if (trim($checkSupervisor) === 'active') {
-        writeln('🔄 Supervisor is running, restarting programs...');
-        run('sudo systemctl restart supervisor.service');
-    } else {
-        writeln('🚀 Supervisor not running. Starting supervisor service...');
-        run('sudo systemctl start supervisor.service');
-    }
-
-    run('sleep 2'); // Wait a bit
-});
-
 // ==== CLEANUP LOCAL SECRETS AFTER DEPLOY ====
 task('deploy:cleanup_local_secrets', function () {
     $localEnvDir = __DIR__.'/.envs';
@@ -258,7 +237,6 @@ after('deploy:update_code', 'deploy:cleanup_release');
 after('artisan:storage:link', 'storage:symlinks');
 before('deploy:symlink', 'build:assets');
 after('build:assets', 'laravel:optimize');
-after('deploy:symlink', 'supervisor:restart');
 after('deploy:success', 'deploy:cleanup_local_secrets');
 after('deploy:failed', 'deploy:unlock');
 after('deploy:failed', 'deploy:cleanup');

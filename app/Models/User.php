@@ -81,6 +81,13 @@ final class User extends Authenticatable implements MustVerifyEmail
         return $this->is_admin;
     }
 
+    protected static function booted(): void
+    {
+        self::saved(static function (): void {
+            Cache::tags('users')->flush();
+        });
+    }
+
     /**
      * Get the attributes that should be cast.
      *

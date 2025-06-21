@@ -47,6 +47,7 @@ final class AppServiceProvider extends ServiceProvider
         $this->configureVite();
 
         if ($this->app->isProduction()) {
+            $this->app['request']->server->set('HTTPS','on');
             URL::forceScheme('https');
         } else {
             URL::forceScheme('http');
