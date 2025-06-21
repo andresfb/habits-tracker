@@ -10,6 +10,7 @@ use App\Console\Interfaces\TaskInterface;
 use App\Console\Services\AuthService;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\Log;
 use RuntimeException;
 use Throwable;
 
@@ -31,6 +32,7 @@ abstract class MenuBasedCommand extends Command
     final public function handle(): void
     {
         try {
+            Log::info('Starting '.$this->getTitle());
             clear();
 
             $this->line('');
@@ -71,6 +73,7 @@ abstract class MenuBasedCommand extends Command
             error("\nSomething went wrong:\n".$throwable->getMessage());
         } finally {
             $this->line('');
+            Log::info('Finished '.$this->getTitle());
         }
     }
 
