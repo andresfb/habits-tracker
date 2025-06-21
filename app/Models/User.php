@@ -66,12 +66,14 @@ final class User extends Authenticatable implements MustVerifyEmail
     {
         $key = md5("user:registered:$this->id");
 
-        return Cache::remember(
-            $key,
-            now()->addWeek(),
-            fn (): bool => $this->invitation()
-                ->whereNotNull('registered_at')
-                ->exists());
+        return Cache::tags('invitations')
+            ->remember(
+                $key,
+                now()->addWeek(),
+                fn (): bool => $this->invitation()
+                    ->whereNotNull('registered_at')
+                    ->exists()
+            );
     }
 
     public function isAdmin(): bool

@@ -161,7 +161,7 @@ task('storage:symlinks', function () {
     run("ln -sfn /server-logs/habits $releasePath/storage/logs");
 });
 
-// Composer install (with first deploy check)
+desc('Composer install');
 task('deploy:vendors', function () {
     $releasePath = get('release_path');
     $sharedVendor = "$releasePath/../shared/vendor";
@@ -175,24 +175,46 @@ task('deploy:vendors', function () {
     }
 });
 
-// -- disable migrations completely
-task('artisan:migrate', function () {
-    writeln('⚠️ Skipping database migrations.');
-});
+// Override the Laravel‐recipe cache/migrate tasks with empty implementations:
+desc('Skipping config cache');
+task('artisan:config:cache', function () {
+    writeln('<comment>→ artisan:config:cache disabled</comment>');
+})->hidden();
 
+desc('Skipping route cache');
+task('artisan:route:cache', function () {
+    writeln('<comment>→ artisan:route:cache disabled</comment>');
+})->hidden();
+
+desc('Skipping view cache');
+task('artisan:view:cache', function () {
+    writeln('<comment>→ artisan:view:cache disabled</comment>');
+})->hidden();
+
+desc('Skipping event cache');
+task('artisan:event:cache', function () {
+    writeln('<comment>→ artisan:event:cache disabled</comment>');
+})->hidden();
+
+desc('Skipping artisan migrate');
+task('artisan:migrate', function () {
+    writeln('<comment>→ artisan:migrate disabled</comment>');
+})->hidden();
+
+desc('Install NPM deps & compile front-end assets');
 task('build:assets', function () {
     if (get('skip_npm', false)) {
-        writeln('⚠️  Skipping asset build on horizon host.');
+        writeln('⚠️ Skipping asset build on horizon host.');
 
         return;
     }
 
     // Otherwise, run npm install & build in your release path
-    run('cd {{release_path}} && npm install');
-    run('cd {{release_path}} && npm run build');
+    run('cd {{release_path}} && /usr/bin/npm install');
+    run('cd {{release_path}} && /usr/bin/npm run build');
 });
 
-// Laravel optimize commands
+desc('Laravel optimize commands');
 task('laravel:optimize', function () {
     run('{{bin/php}} {{release_path}}/artisan optimize:clear');
     run('{{bin/php}} {{release_path}}/artisan optimize');
@@ -201,7 +223,7 @@ task('laravel:optimize', function () {
 // Supervisor restart
 task('supervisor:restart', function () {
     if (get('skip_supervisor', false)) {
-        writeln('⚠️  Supervisor is not installed on this server – skipping.');
+        writeln('⚠️ Supervisor is not installed on this server – skipping.');
 
         return;
     }

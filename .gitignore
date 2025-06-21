@@ -65,4 +65,5 @@ public/vendor
 /.idea
 /.vscode
 /.zed
+/.envs
 .aider.*

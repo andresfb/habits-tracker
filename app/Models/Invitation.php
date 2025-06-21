@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use RuntimeException;
 
@@ -96,6 +97,13 @@ final class Invitation extends Model
         if ($updated === false) {
             throw new RuntimeException('Invitation could not be completed.');
         }
+    }
+
+    protected static function booted(): void
+    {
+        self::saved(static function (): void {
+            Cache::tags('invitations')->flush();
+        });
     }
 
     protected function casts(): array
