@@ -8,4 +8,12 @@ return [
 
     'registration_enabled' => (bool) env('HABITS_REGISTRATION_ENABLED', false),
 
+    'admin' => [
+
+        'name' => env('HABITS_ADMIN_NAME', ''),
+
+        'email' => env('HABITS_ADMIN_EMAIL', ''),
+
+    ],
+
 ];

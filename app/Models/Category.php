@@ -25,6 +25,12 @@ final class Category extends SluggableModel
         return $this->hasMany(Habit::class);
     }
 
+    public static function find(string $slug): Category
+    {
+        return self::where('slug', $slug)
+            ->firstOrFail();
+    }
+
     protected static function booted(): void
     {
         self::saved(static function (): void {

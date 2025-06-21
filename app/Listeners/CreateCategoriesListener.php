@@ -4,20 +4,16 @@ declare(strict_types=1);
 
 namespace App\Listeners;
 
-use App\Models\Category;
+use App\Actions\CreateBaseCategoriesAction;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Config;
 
-final class CreateCategoriesListener implements ShouldQueue
+final readonly class CreateCategoriesListener implements ShouldQueue
 {
+    public function __construct(private CreateBaseCategoriesAction $action) {}
+
     public function handle(Registered $event): void
     {
-        $categories = collect(Config::array('categories.base_list'));
-
-        $categories->each(function (array $category) use ($event): void {
-            $category['user_id'] = $event->user->getAuthIdentifier();
-            Category::create($category);
-        });
+        $this->action->handle((int) $event->user->getAuthIdentifier());
     }
 }
