@@ -33,6 +33,15 @@ Runs the full development stack including:
 - `composer lint` - Fix code style issues with Laravel Pint
 - `composer rector` - Run Rector refactoring
 
+### Code Style
+- **PHP**: Class names PascalCase, methods/properties camelCase, Strict mode enabled
+- **Formatting**: Single quotes, semicolons required, 150 char width, 4-space tabs (2 for YAML)
+- **Components**: Livewire Volt, Tailwind CSS, maryUI components
+- **Error Handling**: Use Laravel's built-in exception handling for PHP, Sentry for monitoring
+- **Testing**: Pest PHP with Feature/Unit directory structure
+- **Linting**: PHP Pint for linting
+- **Type Check**: PHP Stal (via LaraStan) for type check safety 
+  
 ## Architecture Overview
 
 ### Core Technology Stack
