@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\DateAttributable;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -40,31 +41,7 @@ final class Habit extends SluggableModel
 {
     use HasFactory;
     use SoftDeletes;
-
-    public function targetValue(): Attribute
-    {
-        return Attribute::make(
-            get: static fn (int $val): float => $val / 1000,
-            set: static fn (float $val): int => (int) round($val * 1000),
-        );
-    }
-
-    public function defaultValue(): Attribute
-    {
-        return Attribute::make(
-            get: static fn (int $val): float => $val / 1000,
-            set: static fn (float $val): int => (int) round($val * 1000),
-        );
-    }
-
-    public function icon(): Attribute
-    {
-        return Attribute::make(
-            get: static fn (?string $val): ?string => is_null($val)
-                ? Config::string('constants.default_icon')
-                : $val,
-        );
-    }
+    use DateAttributable;
 
     public function user(): BelongsTo
     {
@@ -104,8 +81,12 @@ final class Habit extends SluggableModel
     public function scopeWithEntriesOnDay(Builder $query, ?CarbonImmutable $asOfDate = null): Builder
     {
         $fromDate = $asOfDate instanceof CarbonImmutable
-            ? $asOfDate->startOfDay()->toDateTimeString()
-            : Carbon::now()->startOfDay()->toDateTimeString();
+            ? $asOfDate->timezone(Config::string('constants.default_timezone'))
+                ->startOfDay()
+                ->toDateTimeString()
+            : Carbon::now()->timezone(Config::string('constants.default_timezone'))
+                ->startOfDay()
+                ->toDateTimeString();
 
         return $query->with(['entries' => function ($q) use ($fromDate): void {
             $q->join('habits', 'habit_entries.habit_id', '=', 'habits.id')
@@ -121,8 +102,12 @@ final class Habit extends SluggableModel
 
     public function scopeWithEntriesOnMonth(Builder $query, CarbonImmutable $asOfDate): Builder
     {
-        $fromDate = $asOfDate->startOfMonth()->toDateTimeString();
-        $toDate = $asOfDate->endOfMonth()->toDateTimeString();
+        $fromDate = $asOfDate->timezone(Config::string('constants.default_timezone'))
+            ->startOfMonth()
+            ->toDateTimeString();
+        $toDate = $asOfDate->timezone(Config::string('constants.default_timezone'))
+            ->endOfMonth()
+            ->toDateTimeString();
 
         return $query->with(['entries' => function ($q) use ($fromDate, $toDate): void {
             $q->join('habits', 'habit_entries.habit_id', '=', 'habits.id')
@@ -172,5 +157,40 @@ final class Habit extends SluggableModel
             'allow_multiple_times' => 'boolean',
             'order_by' => 'integer',
         ];
+    }
+
+    protected function targetValue(): Attribute
+    {
+        return Attribute::make(
+            get: static fn (int $val): float => $val / 1000,
+            set: static fn (float $val): int => (int) round($val * 1000),
+        );
+    }
+
+    protected function defaultValue(): Attribute
+    {
+        return Attribute::make(
+            get: static fn (int $val): float => $val / 1000,
+            set: static fn (float $val): int => (int) round($val * 1000),
+        );
+    }
+
+    protected function icon(): Attribute
+    {
+        return Attribute::make(
+            get: static fn (?string $val): ?string => is_null($val)
+                ? Config::string('constants.default_icon')
+                : $val,
+        );
+    }
+
+    protected function createdAt(): Attribute
+    {
+        return $this->localizedDate();
+    }
+
+    protected function updatedAt(): Attribute
+    {
+        return $this->localizedDate();
     }
 }

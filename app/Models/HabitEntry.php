@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\DateAttributable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,6 +27,7 @@ final class HabitEntry extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use DateAttributable;
 
     public function habit(): BelongsTo
     {
@@ -52,5 +54,20 @@ final class HabitEntry extends Model
         return [
             'logged_at' => 'datetime',
         ];
+    }
+
+    protected function loggedAt(): Attribute
+    {
+        return $this->localizedDate();
+    }
+
+    protected function createdAt(): Attribute
+    {
+        return $this->localizedDate();
+    }
+
+    protected function updatedAt(): Attribute
+    {
+        return $this->localizedDate();
     }
 }

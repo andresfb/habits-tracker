@@ -8,6 +8,7 @@ use App\Libraries\Pushover\PushoverLibrary;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -60,7 +61,8 @@ final class NotificationSummaryService
 
             $message .= sprintf(
                 "[%s] %s\n",
-                Carbon::create($notification->created_at)?->format('M d, Y h:i A') ?? 'Unknown',
+                Carbon::create($notification->created_at)?->timezone(Config::string('constants.default_timezone'))
+                    ->format('M d, Y h:i A') ?? 'Unknown',
                 $data['message'],
             );
         }

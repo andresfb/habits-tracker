@@ -159,14 +159,34 @@ class extends Component {
                 </x-slot:sub-value>
                 <x-slot:actions>
                     @if($tracker->needsEntry || $tracker->allowMore)
-                        <x-button class="btn-ghost p-0 -m-px" wire:click="addEntry({{ $tracker->id }})" spinner="register">
-                            <x-bi-square
-                                width="35"
-                                height="35"
-                                class="text-secondary"/>
-                        </x-button>
+                        <div x-data="{
+                                showCheck: false,
+                                handleClick() {
+                                    this.showCheck = true;
+                                    setTimeout(() => {
+                                        $wire.addEntry({{ $tracker->id }});
+                                    }, 1000); // Show checkmark for 1 seconds
+                                }
+                            }">
+                            <button
+                                @click="handleClick()"
+                                class="btn-ghost relative transition-all duration-300"
+                                :class="{ showCheck }">
+                                <span
+                                    class="transition-opacity duration-300"
+                                    :class="{ 'opacity-0': showCheck, 'opacity-100': !showCheck }">
+                                    <x-bi-square width="35" height="35" class="text-secondary"/>
+                                </span>
+
+                                <span
+                                    class="absolute inset-0 flex items-center justify-center transition-opacity duration-300"
+                                    :class="{ 'opacity-100': showCheck, 'opacity-0': !showCheck }">
+                                    <x-bi-check-square width="35" height="35" class="text-success"/>
+                                </span>
+                            </button>
+                        </div>
                     @else
-                        <x-button class="btn-ghost p-0 -m-px" disabled>
+                        <x-button class="btn-ghost p-0" disabled>
                             <x-bi-check-square width="35" height="35" class="text-success"/>
                         </x-button>
                     @endif

@@ -25,9 +25,13 @@ new class extends Component {
     {
         // 1) build a “month view” from the 1st Mon before startOfMonth()
         //    to the last Sun after endOfMonth()
-        $start = CarbonImmutable::now()->startOfMonth()
+        $start = CarbonImmutable::now()
+            ->timezone(Config::string('constants.default_timezone'))
+            ->startOfMonth()
             ->startOfWeek(CarbonInterface::SUNDAY);
-        $end = CarbonImmutable::now()->endOfMonth()
+        $end = CarbonImmutable::now()
+            ->timezone(Config::string('constants.default_timezone'))
+            ->endOfMonth()
             ->endOfWeek(CarbonInterface::MONDAY);
 
         $this->days = collect(
@@ -40,7 +44,9 @@ new class extends Component {
         return [
             'habits' => $this->service->getMonthlyTrackers(
                 auth()->id(),
-                CarbonImmutable::now()->startOfMonth(),
+                CarbonImmutable::now()
+                    ->timezone(Config::string('constants.default_timezone'))
+                    ->startOfMonth(),
             ),
         ];
     }
@@ -69,7 +75,7 @@ new class extends Component {
             </div>
 
             <div class="grid grid-cols-7 text-xs font-semibold uppercase text-gray-500 mt-3 mb-3">
-                @foreach(['M','T','W','T','F','S','S'] as $dayLetter)
+                @foreach(['S','M','T','W','T','F','S'] as $dayLetter)
                     <div class="text-left ml-2">{{ $dayLetter }}</div>
                 @endforeach
             </div>
