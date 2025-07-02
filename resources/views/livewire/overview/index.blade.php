@@ -29,6 +29,7 @@ new class extends Component {
             ->timezone(Config::string('constants.default_timezone'))
             ->startOfMonth()
             ->startOfWeek(CarbonInterface::SUNDAY);
+
         $end = CarbonImmutable::now()
             ->timezone(Config::string('constants.default_timezone'))
             ->endOfMonth()
@@ -44,9 +45,7 @@ new class extends Component {
         return [
             'habits' => $this->service->getMonthlyTrackers(
                 auth()->id(),
-                CarbonImmutable::now()
-                    ->timezone(Config::string('constants.default_timezone'))
-                    ->startOfMonth(),
+                CarbonImmutable::now(),
             ),
         ];
     }

@@ -80,13 +80,16 @@ final class Habit extends SluggableModel
 
     public function scopeWithEntriesOnDay(Builder $query, ?CarbonImmutable $asOfDate = null): Builder
     {
-        $fromDate = $asOfDate instanceof CarbonImmutable
-            ? $asOfDate->timezone(Config::string('constants.default_timezone'))
-                ->startOfDay()
-                ->toDateTimeString()
-            : Carbon::now()->timezone(Config::string('constants.default_timezone'))
-                ->startOfDay()
-                ->toDateTimeString();
+        $recordedTimezone = Config::string('app.timezone');
+        $timezone = Config::string('constants.default_timezone');
+
+        $sourceDate = $asOfDate instanceof CarbonImmutable
+            ? $asOfDate->startOfDay()
+            : Carbon::now()->startOfDay();
+
+        $fromDate = CarbonImmutable::parse($sourceDate, $timezone)
+            ->timezone($recordedTimezone)
+            ->toDateTimeString();
 
         return $query->with(['entries' => function ($q) use ($fromDate): void {
             $q->join('habits', 'habit_entries.habit_id', '=', 'habits.id')
@@ -102,11 +105,15 @@ final class Habit extends SluggableModel
 
     public function scopeWithEntriesOnMonth(Builder $query, CarbonImmutable $asOfDate): Builder
     {
-        $fromDate = $asOfDate->timezone(Config::string('constants.default_timezone'))
-            ->startOfMonth()
+        $recordedTimezone = Config::string('app.timezone');
+        $timezone = Config::string('constants.default_timezone');
+
+        $fromDate = CarbonImmutable::parse($asOfDate->startOfMonth(), $timezone)
+            ->timezone($recordedTimezone)
             ->toDateTimeString();
-        $toDate = $asOfDate->timezone(Config::string('constants.default_timezone'))
-            ->endOfMonth()
+
+        $toDate = CarbonImmutable::parse($asOfDate->endOfMonth(), $timezone)
+            ->timezone($recordedTimezone)
             ->toDateTimeString();
 
         return $query->with(['entries' => function ($q) use ($fromDate, $toDate): void {

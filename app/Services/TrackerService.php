@@ -9,6 +9,7 @@ use App\Models\HabitEntry;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
 use RuntimeException;
 
 final readonly class TrackerService
