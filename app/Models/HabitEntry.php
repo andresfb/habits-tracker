@@ -4,30 +4,28 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Traits\DateAttributable;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 
 /**
  * @property int $id
  * @property int $habit_id
  * @property int $value
- * @property Carbon $logged_at
+ * @property CarbonImmutable $logged_at
  * @property string $notes
- * @property Carbon $deleted_at
- * @property Carbon $created_at
- * @property Carbon $updated_at
+ * @property CarbonImmutable $deleted_at
+ * @property CarbonImmutable $created_at
+ * @property CarbonImmutable $updated_at
  */
 final class HabitEntry extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    use DateAttributable;
 
     public function habit(): BelongsTo
     {
@@ -54,20 +52,5 @@ final class HabitEntry extends Model
         return [
             'logged_at' => 'datetime',
         ];
-    }
-
-    protected function loggedAt(): Attribute
-    {
-        return $this->localizedDate();
-    }
-
-    protected function createdAt(): Attribute
-    {
-        return $this->localizedDate();
-    }
-
-    protected function updatedAt(): Attribute
-    {
-        return $this->localizedDate();
     }
 }

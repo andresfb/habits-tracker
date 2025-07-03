@@ -26,12 +26,10 @@ new class extends Component {
         // 1) build a “month view” from the 1st Mon before startOfMonth()
         //    to the last Sun after endOfMonth()
         $start = CarbonImmutable::now()
-            ->timezone(Config::string('constants.default_timezone'))
             ->startOfMonth()
             ->startOfWeek(CarbonInterface::SUNDAY);
 
         $end = CarbonImmutable::now()
-            ->timezone(Config::string('constants.default_timezone'))
             ->endOfMonth()
             ->endOfWeek(CarbonInterface::MONDAY);
 

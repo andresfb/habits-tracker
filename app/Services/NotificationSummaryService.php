@@ -61,8 +61,7 @@ final class NotificationSummaryService
 
             $message .= sprintf(
                 "[%s] %s\n",
-                Carbon::create($notification->created_at)?->timezone(Config::string('constants.default_timezone'))
-                    ->format('M d, Y h:i A') ?? 'Unknown',
+                Carbon::create($notification->created_at)?->format('M d, Y h:i A') ?? 'Unknown',
                 $data['message'],
             );
         }

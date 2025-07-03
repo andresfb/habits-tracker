@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Traits\DateAttributable;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -41,7 +40,6 @@ final class Habit extends SluggableModel
 {
     use HasFactory;
     use SoftDeletes;
-    use DateAttributable;
 
     public function user(): BelongsTo
     {
@@ -80,16 +78,9 @@ final class Habit extends SluggableModel
 
     public function scopeWithEntriesOnDay(Builder $query, ?CarbonImmutable $asOfDate = null): Builder
     {
-        $recordedTimezone = Config::string('app.timezone');
-        $timezone = Config::string('constants.default_timezone');
-
-        $sourceDate = $asOfDate instanceof CarbonImmutable
-            ? $asOfDate->startOfDay()
-            : Carbon::now()->startOfDay();
-
-        $fromDate = CarbonImmutable::parse($sourceDate, $timezone)
-            ->timezone($recordedTimezone)
-            ->toDateTimeString();
+        $fromDate = $asOfDate instanceof CarbonImmutable
+            ? $asOfDate->startOfDay()->toDateTimeString()
+            : Carbon::now()->startOfDay()->toDateTimeString();
 
         return $query->with(['entries' => function ($q) use ($fromDate): void {
             $q->join('habits', 'habit_entries.habit_id', '=', 'habits.id')
@@ -105,16 +96,8 @@ final class Habit extends SluggableModel
 
     public function scopeWithEntriesOnMonth(Builder $query, CarbonImmutable $asOfDate): Builder
     {
-        $recordedTimezone = Config::string('app.timezone');
-        $timezone = Config::string('constants.default_timezone');
-
-        $fromDate = CarbonImmutable::parse($asOfDate->startOfMonth(), $timezone)
-            ->timezone($recordedTimezone)
-            ->toDateTimeString();
-
-        $toDate = CarbonImmutable::parse($asOfDate->endOfMonth(), $timezone)
-            ->timezone($recordedTimezone)
-            ->toDateTimeString();
+        $fromDate = $asOfDate->startOfMonth()->toDateTimeString();
+        $toDate = $asOfDate->endOfMonth()->toDateTimeString();
 
         return $query->with(['entries' => function ($q) use ($fromDate, $toDate): void {
             $q->join('habits', 'habit_entries.habit_id', '=', 'habits.id')
@@ -189,15 +172,5 @@ final class Habit extends SluggableModel
                 ? Config::string('constants.default_icon')
                 : $val,
         );
-    }
-
-    protected function createdAt(): Attribute
-    {
-        return $this->localizedDate();
-    }
-
-    protected function updatedAt(): Attribute
-    {
-        return $this->localizedDate();
     }
 }

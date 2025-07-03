@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+date_default_timezone_set('America/New_York');
+
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 

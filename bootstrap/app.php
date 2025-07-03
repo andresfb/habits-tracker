@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-date_default_timezone_set('America/New_York');
-
 use App\Http\Middleware\HasInvitationMiddleware;
 use App\Http\Middleware\UserIsFullyRegisteredMiddleware;
 use App\Jobs\NotificationsSummaryJob;
