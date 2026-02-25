@@ -20,32 +20,22 @@ final readonly class TrackerService
 
     public function getDailyTrackers(int $userId, ?CarbonImmutable $loggDate = null): Collection
     {
-        return Cache::tags('trackers')
-            ->remember(
-                "daily:trackers:{$userId}",
-                now()->addMinutes(15),
-                static fn () => Habit::query()
-                    ->withInfo()
-                    ->withEntriesOnDay($loggDate)
-                    ->where('user_id', $userId)
-                    ->orderBy('order_by')
-                    ->get()
-            );
+        return Habit::query()
+            ->withInfo()
+            ->withEntriesOnDay($loggDate)
+            ->where('user_id', $userId)
+            ->orderBy('order_by')
+            ->get();
     }
 
     public function getMonthlyTrackers(int $userId, CarbonImmutable $loggDate): Collection
     {
-        return Cache::tags('trackers')
-            ->remember(
-                "monthly:trackers:{$userId}",
-                now()->addHour(),
-                static fn () => Habit::query()
-                    ->withInfo()
-                    ->withEntriesOnMonth($loggDate)
-                    ->where('user_id', $userId)
-                    ->orderBy('order_by')
-                    ->get()
-            );
+        return Habit::query()
+            ->withInfo()
+            ->withEntriesOnMonth($loggDate)
+            ->where('user_id', $userId)
+            ->orderBy('order_by')
+            ->get();
     }
 
     public function recordEntry(int $habitId, int $userId): void
